@@ -1,7 +1,7 @@
 # tripPlatform
 여행추천 플랫폼
 
-기술스택
+# 기술스택
  Tools
   VisualStudioCode
   STS
@@ -10,7 +10,7 @@
   Figma
   git
 
- Developer Language & FrameWork
+# Developer Language & FrameWork
   html5
   css3
   JavaScript
@@ -19,11 +19,11 @@
   Spring
   MyBatis
 
- Database & Server
+# Database & Server
   Oracle
   Apatche
 
- API
+# API
   KaKaomap API
   KaKaomobility
   naver
@@ -37,6 +37,9 @@
 
 # 상세페이지 01
  ![image](https://private-user-images.githubusercontent.com/169329434/376106327-ec503260-4234-4d8b-9404-c24598e20025.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjg4Nzk0MjMsIm5iZiI6MTcyODg3OTEyMywicGF0aCI6Ii8xNjkzMjk0MzQvMzc2MTA2MzI3LWVjNTAzMjYwLTQyMzQtNGQ4Yi05NDA0LWMyNDU5OGUyMDAyNS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDE0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAxNFQwNDEyMDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05MGI2YjJmY2IxZjI1OWRiZmExMjZkZmI0N2U1YmFiNWFjMjM1NTc0MTBiNDYzMWEzNzZmNGVlMDBiNDgwYjg5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.MJUXijsKel9dx5Wyu-6i2Vgl3dr5FJpju0pT_QbgkNc)
+
+# 상세페이지 02
+![image](https://private-user-images.githubusercontent.com/169329434/376106497-1da64b7f-d8e0-4eb5-a897-c5cdce10590a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjg4Nzk1MjUsIm5iZiI6MTcyODg3OTIyNSwicGF0aCI6Ii8xNjkzMjk0MzQvMzc2MTA2NDk3LTFkYTY0YjdmLWQ4ZTAtNGViNS1hODk3LWM1Y2RjZTEwNTkwYS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDE0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAxNFQwNDEzNDVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mYzJhY2FhZTQ4M2RiYzFmMzEzNmMxNzkyOTI3OTM0YTdjODdhZDNhN2Q4NjJiMjUxZDM5ZmVkNDU4ZjM2OGRkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.M2jaCrwRhwx3d2wyNEDB_6SCIRvGD9egDqUuBojR7Ys)
 
 프로젝트 일정
 2024.08.06부터 2024.09.20일까지 총45일간 프로젝트를 진행하였습니다.
