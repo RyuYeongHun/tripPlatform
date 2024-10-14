@@ -52,10 +52,10 @@
 # 상세페이지 06
  ![image](https://private-user-images.githubusercontent.com/169329434/376107037-5ec30a46-2a9f-4ca1-bc98-e4a3e631319c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjg4Nzk4MjgsIm5iZiI6MTcyODg3OTUyOCwicGF0aCI6Ii8xNjkzMjk0MzQvMzc2MTA3MDM3LTVlYzMwYTQ2LTJhOWYtNGNhMS1iYzk4LWU0YTNlNjMxMzE5Yy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDE0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAxNFQwNDE4NDhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04MTk2MGQ0YjU3MGVlZjdkNGVhNjAwNzJiNmEwYTg3NGQxZTU0NWZlN2E5YTRmN2JjNTY5MjI0ZWI5Y2Q4NDRkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.C0XVnvCk6tVf_3p63WWQ30RhkjMCZCMRMPy0E9Z7b7Y)
 
-프로젝트 일정
+# 프로젝트 일정
 2024.08.06부터 2024.09.20일까지 총45일간 프로젝트를 진행하였습니다.
 
-프로젝트 후기
+# 프로젝트 후기
 AJAX를 통한 비동기통신으로 JSON데이터를 보내 실시간 반영되는 것을 확인하는 것이 좋았고,
 사용자 UI/UX에 맞춘 플랫폼이다 보니 적절한 정보 전달이 잘 이루어진것 같아 좋았습니다.
 또한 UX의 경험으로만 갖춰진 리뷰를 직접 만들어보니 뜻깊고 새로운 경험이었습니다.
