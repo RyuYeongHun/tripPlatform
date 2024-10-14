@@ -1,8 +1,7 @@
 # tripPlatform
 여행추천 플랫폼
 
-# 기술스택
- Tools
+# 기술스택  Tools
   VisualStudioCode,
   STS,
   oracle,
