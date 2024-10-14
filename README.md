@@ -6,7 +6,7 @@
   STS,
   oracle,
   SVN,
-  Figma,
+  Figma,ㄱㄹ
   git
 
 # Developer Language & FrameWork
