@@ -1,0 +1,89 @@
+package joeun.project.dto;
+
+public class MwProductDto {
+	
+	private int product_no;
+	private String region;
+	private String img;
+	private String product_name;
+	private double score;
+	private int cost_price;
+	private int discount_price;
+	
+	public MwProductDto() {}
+
+	public MwProductDto(int product_no, String region, String img, String product_name, double score, int cost_price, int discount_price) {
+		super();
+		this.product_no = product_no;
+		this.region = region;
+		this.img = img;
+		this.product_name = product_name;
+		this.score = score;
+		this.cost_price = cost_price;
+		this.discount_price = discount_price;
+	}
+
+	@Override
+	public String toString() {
+		return "MwProductDto [product_no=" + product_no + ", region=" + region + ", img=" + img + ", product_name="
+				+ product_name + ", score=" + score + ", cost_price=" + cost_price + ", discount_price="
+				+ discount_price + "]";
+	}
+
+	public int getProduct_no() {
+		return product_no;
+	}
+
+	public void setProduct_no(int product_no) {
+		this.product_no = product_no;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	public int getCost_price() {
+		return cost_price;
+	}
+
+	public void setCost_price(int cost_price) {
+		this.cost_price = cost_price;
+	}
+
+	public int getDiscount_price() {
+		return discount_price;
+	}
+
+	public void setDiscount_price(int discount_price) {
+		this.discount_price = discount_price;
+	}
+	
+}

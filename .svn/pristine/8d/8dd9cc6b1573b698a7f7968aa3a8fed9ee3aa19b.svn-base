@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IMwCRUDDao">
+	<insert id="reviewInsert">
+		INSERT INTO BOLGGURI_REVIEW (
+		    REPLY_CONTENT,
+		    C_DATE,
+		    LIKE_CNT,
+		    SCORE,
+		    REVIEW_ID,
+		    USER_ID,
+		    BOLGGURI_ID
+		)
+		VALUES(
+		    '리뷰 내용 입니다.',
+		    SYSDATE,
+		    FLOOR(DBMS_RANDOM.VALUE(0, 101)),
+		    FLOOR(DBMS_RANDOM.VALUE(1, 6)),
+		    REVIEW_ID_COUNT.NEXTVAL,
+		    USER_ID_COUNT.NEXTVAL,
+		    #{bolgguri_id}
+		)
+	</insert>
+	<update id="view_countUp">
+		UPDATE BOLGGURI SET VIEW_COUNT = VIEW_COUNT + 1 WHERE BOLGGURI_ID = #{bolgguri_id}
+	</update>
+</mapper>
+
+<!-- 1. sql 테이블 작성 2. 프로젝트 생성 3. pom.xml에서 설정 작업 - https://www.mvnrepository.com/ 
+	4. src/main/resources밑에 mappers폴더 에 mapper파일 만들기 - 기존 파일에서 구조를 복사해서 쓰자. - 
+	네임스페이스는 해당 파일의 db작업을 실제로 자바코드에서 사용할 dao클래스의 인터페이스 이름으로 기술한다. - dao인터페이스의 
+	용도는 mapper에기술한 sql를 실행하는데 사용된다. - 해당 dao에서 사용할 sql에 맞춰서 insert,update,select,delete 
+	테그로 묶는다. - sql테그의 id는 dao인터페이스의 메소드가 된다. - 메소드에 throws Exception 설정을 한다. 
+	- 리턴값이 있으면 resultType에 기술한다. 클래스이름 시작을 소문자로 기술한다. 5. mybatis-config.xml 를 
+	만든다. 6. dto클래스를 만든다. 7. dao인터페이스를 만든다. 구현부는 만들지 않아도 자동으로 해당 mapper가 실행된다. 
+	8. root-contex.xml에 mybatis 설정 파일을 기술한다. - dataSource 에 DB정보 기술 - sqlSessionFactory 
+	작업에 필요한 정보들 연결 - sqlSession 실제 자바코드에서 설정한 정보를 가지고 db작업 할때 사용 9. 정상 동작 여부를 
+	확인 10.service 인터페이스 만들기 11.service 구현부 만들기 - 서비스 구현 클래스에 @Service 를 추가한다. 
+	- @Autowired를 이용해서 sqlsession를 얻어와 조작할 dao를 찾는다. - dao를 이용해서 db작업을 한다. - 
+	root-context.xml component-scan를 추가하여 사용할 service를 등록한다. 12.controller 제작 
+	13.view 제작 14.web.xml에 한글 필터 등록 -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

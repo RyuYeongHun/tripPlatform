@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>사업자</title>
+<style>
+body {
+	text_align: center;
+}
+
+.h {
+	display: flex;
+	justify-content: center;
+}
+
+.login_success {
+	text-align: center;
+}
+</style>
+<script>
+	<c:if test="${not empty mm}">
+	alert("${mm}");
+	</c:if>
+</script>
+</head>
+<body>
+
+
+	<div class="h">
+		<h1>사업자 로그인</h1>
+	</div>
+	<div class="login_success">
+		<form action="biz_success" method="post">
+			아이디<br>
+			<input type="text" name="biz_no" placeholder="아이디"><br>
+			비밀번호<br>
+			<input type="password" name="biz_pw" placeholder="비밀번호"><br>
+			<input type="submit" value="로그인">
+		</form>
+		<br><br>
+		<button type="button" onclick="location.href='/b2b_login'">사업자회원가입</button>
+		<br>
+		<a href="js/login">뒤로가기</a>
+	</div>
+
+</body>
+</html>

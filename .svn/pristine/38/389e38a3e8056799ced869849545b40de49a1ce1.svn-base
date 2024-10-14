@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IMwBolgguriDao">
+	<!-- 볼거리 메인페이지 추천순위 리스트 -->
+	<select id="selectBest" resultType="joeun.project.dto.MwBolgguriDto">
+		SELECT
+		    B.BOLGGURI_ID,
+		    B.TITLE,
+		    B.ADDR1,
+		    B.FIRSTIMAGE2,
+		    B.VIEW_COUNT,
+		    NVL(R.REVIEW_COUNT, 0) AS REVIEW_COUNT,
+		    NVL(R.AVG_SCORE, 0) AS AVG_SCORE,
+		    NVL(((NVL(AVG_SCORE,0 )*50)+(REVIEW_COUNT*2)), 0) AS RANK_SCORE,
+		    CASE
+		        WHEN C.CODE = 'A02' THEN SUBSTR(C.NAME, 1, 2)
+		        ELSE C.NAME
+		    END AS CATTITLE
+		FROM
+		    BOLGGURI B
+		LEFT JOIN
+		    (SELECT
+		        BOLGGURI_ID,
+		        COUNT(*) AS REVIEW_COUNT,
+		        ROUND(AVG(SCORE), 1) AS AVG_SCORE
+		    FROM
+		        BOLGGURI_REVIEW
+		    GROUP BY
+		        BOLGGURI_ID) R
+		ON
+		    B.BOLGGURI_ID = R.BOLGGURI_ID
+		LEFT JOIN
+		    CAT_CODE C
+		ON
+		    B.CAT1 = C.CODE
+		<where>
+			AND B.FIRSTIMAGE2 IS NOT NULL
+			AND B.ADDR1 IS NOT NULL
+			AND C.CODE BETWEEN 'A01' AND 'A04'
+	        <if test="areaCode != null and areaCode.trim() != ''">
+	            AND B.AREACODE = #{areaCode,jdbcType=VARCHAR}
+	        </if>
+	    </where>
+		ORDER BY RANK_SCORE DESC
+		FETCH FIRST 3 ROWS ONLY
+	</select>
+	<!-- 검색 결과 -->
+	<select id="selectAll" resultType="joeun.project.dto.MwBolgguriDto">
+		SELECT 
+		    B.BOLGGURI_ID,
+		    B.ADDR1,
+		    B.PARKING_CNT,
+		    B.FIRSTIMAGE2,
+		    B.TITLE,
+		    B.VIEW_COUNT,
+		    B.MAPX,
+		    B.MAPY,
+		    NVL(R.REVIEW_COUNT, 0) AS REVIEW_COUNT,
+		    NVL(((NVL(AVG_SCORE,0 )*100)+(B.VIEW_COUNT*0.01)+(B.LIKES*0.01)), 0) AS RANK_SCORE,
+		    NVL(R.AVG_SCORE, 0) AS AVG_SCORE,
+		    CASE
+		        WHEN C.CODE = 'A02' THEN SUBSTR(C.NAME, 1, 2)
+		        ELSE C.NAME
+		    END AS CATTITLE
+		FROM BOLGGURI B
+		LEFT JOIN
+		    (SELECT
+		        BOLGGURI_ID,
+		        COUNT(*) AS REVIEW_COUNT,
+		        ROUND(AVG(SCORE), 1) AS AVG_SCORE
+		    FROM
+		        BOLGGURI_REVIEW
+		    GROUP BY
+		        BOLGGURI_ID) R
+		ON
+		    B.BOLGGURI_ID = R.BOLGGURI_ID
+		LEFT JOIN
+		    CAT_CODE C
+		ON
+		    B.CAT1 = C.CODE
+		LEFT JOIN
+		    AREA_CODE A
+		ON
+		    B.AREACODE = A.AREACODE
+		<where>
+			AND B.FIRSTIMAGE2 IS NOT NULL
+			AND B.ADDR1 IS NOT NULL
+			AND C.CODE BETWEEN 'A01' AND 'A04'
+	        <if test="areaCode != null and areaCode.trim() != ''">
+	            AND B.AREACODE = #{areaCode,jdbcType=VARCHAR}
+	        </if>
+	         <if test="list != null and list.size() > 0">
+                <foreach item="item" collection="list" open="AND (" separator=" OR " close=")">
+                    CAT1 LIKE #{item} || '%'
+                </foreach>
+	        </if>
+    	</where>
+    	<choose>
+    		<when test="filterNo == 1">
+	            ORDER BY BOLGGURI_ID ASC
+	        </when>
+	        <when test="filterNo == 2">
+	            ORDER BY RANK_SCORE DESC
+	        </when>
+	        <when test="filterNo == 3">
+	            ORDER BY AVG_SCORE DESC
+	        </when>
+	        <when test="filterNo == 4">
+	            ORDER BY AVG_SCORE ASC
+	        </when>
+	        <when test="filterNo == 5">
+	            ORDER BY REVIEW_COUNT DESC
+	        </when>
+	        <otherwise>
+	            ORDER BY BOLGGURI_ID ASC <!-- 기본 정렬 조건 추가 -->
+	        </otherwise>
+	    </choose>
+	    OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	<!-- 겸색 결과 카운트 -->
+	<select id="selectAllCount" resultType="String">
+		SELECT COUNT(*)
+		FROM BOLGGURI B
+		LEFT JOIN
+		    (SELECT
+		        BOLGGURI_ID,
+		        COUNT(*) AS REVIEW_COUNT,
+		        ROUND(AVG(SCORE), 1) AS AVG_SCORE
+		    FROM
+		        BOLGGURI_REVIEW
+		    GROUP BY
+		        BOLGGURI_ID) R
+		ON
+		    B.BOLGGURI_ID = R.BOLGGURI_ID
+		LEFT JOIN
+		    CAT_CODE C
+		ON
+		    B.CAT1 = C.CODE
+		LEFT JOIN
+		    AREA_CODE A
+		ON
+		    B.AREACODE = A.AREACODE
+		WHERE
+		    B.FIRSTIMAGE2 IS NOT NULL
+		    AND B.ADDR1 IS NOT NULL
+		    AND C.CODE BETWEEN 'A01' AND 'A04'
+		<if test="areaCode != null and areaCode.trim() != ''">
+		    AND B.AREACODE = #{areaCode,jdbcType=VARCHAR}
+		</if>
+		<if test="list != null and list.size() > 0">
+		    <foreach item="item" collection="list" open="AND (" separator=" OR " close=")">
+		        CAT1 LIKE #{item} || '%'
+		    </foreach>
+		</if>
+	</select>
+	<!-- 지역메뉴창 리스트-->
+	<select id="regionSelectAll" resultType="joeun.project.dto.MwBolgguriRegionDto">
+		SELECT
+		    AREACODE,
+		    CASE
+		        WHEN AREACODE = '8' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '32' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '33' THEN N'충북'
+		        WHEN AREACODE = '34' THEN N'충남'
+		        WHEN AREACODE = '35' THEN N'경북'
+		        WHEN AREACODE = '36' THEN N'경남'
+		        WHEN AREACODE = '37' THEN N'전북'
+		        WHEN AREACODE = '38' THEN N'전남'
+		    ELSE NAME
+		    END AS NAME
+		FROM
+		    AREA_CODE
+		ORDER BY TO_NUMBER(AREACODE) ASC
+	</select>
+	<!-- 카테고리 메뉴창 리스트 -->
+	<select id="categorySelectAll" resultType="joeun.project.dto.MwBolgguriCategoryDto">
+		SELECT
+			CODE,
+			CASE
+		        WHEN CODE = 'A02' THEN SUBSTR(NAME, 1, 2)
+		        ELSE NAME
+		    END AS NAME
+		FROM CAT_CODE
+		WHERE CODE LIKE '___' AND CODE BETWEEN 'A01' AND 'A04'
+		ORDER BY CODE
+	</select>
+	<!-- 지역명  select -->
+	<select id="regionSelect" resultType="joeun.project.dto.MwBolgguriRegionDto">
+           SELECT
+           AREACODE,
+           CASE
+		        WHEN AREACODE = '8' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '32' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '33' THEN N'충북'
+		        WHEN AREACODE = '34' THEN N'충남'
+		        WHEN AREACODE = '35' THEN N'경북'
+		        WHEN AREACODE = '36' THEN N'경남'
+		        WHEN AREACODE = '37' THEN N'전북'
+		        WHEN AREACODE = '38' THEN N'전남'
+		    ELSE NAME
+		    END AS NAME
+           FROM AREA_CODE WHERE AREACODE = #{areaCode}
+	</select>
+
+	<!-- 카테고리명  select -->
+	<select id="categorySelect" resultType="joeun.project.dto.MwBolgguriCategoryDto">
+		SELECT
+			CODE,
+			CASE
+		        WHEN CODE = 'A02' THEN SUBSTR(NAME, 1, 2)
+		        ELSE NAME
+		    END AS NAME
+		FROM CAT_CODE
+		WHERE 1=1
+		AND CODE LIKE '___'
+		<foreach item="item" collection="list" open="AND(" separator=" OR " close=")">
+        	CODE LIKE #{item,jdbcType=VARCHAR}
+        </foreach>
+	</select>
+	
+</mapper>
+
+<!-- 1. sql 테이블 작성 2. 프로젝트 생성 3. pom.xml에서 설정 작업 - https://www.mvnrepository.com/ 
+	4. src/main/resources밑에 mappers폴더 에 mapper파일 만들기 - 기존 파일에서 구조를 복사해서 쓰자. - 
+	네임스페이스는 해당 파일의 db작업을 실제로 자바코드에서 사용할 dao클래스의 인터페이스 이름으로 기술한다. - dao인터페이스의 
+	용도는 mapper에기술한 sql를 실행하는데 사용된다. - 해당 dao에서 사용할 sql에 맞춰서 insert,update,select,delete 
+	테그로 묶는다. - sql테그의 id는 dao인터페이스의 메소드가 된다. - 메소드에 throws Exception 설정을 한다. 
+	- 리턴값이 있으면 resultType에 기술한다. 클래스이름 시작을 소문자로 기술한다. 5. mybatis-config.xml 를 
+	만든다. 6. dto클래스를 만든다. 7. dao인터페이스를 만든다. 구현부는 만들지 않아도 자동으로 해당 mapper가 실행된다. 
+	8. root-contex.xml에 mybatis 설정 파일을 기술한다. - dataSource 에 DB정보 기술 - sqlSessionFactory 
+	작업에 필요한 정보들 연결 - sqlSession 실제 자바코드에서 설정한 정보를 가지고 db작업 할때 사용 9. 정상 동작 여부를 
+	확인 10.service 인터페이스 만들기 11.service 구현부 만들기 - 서비스 구현 클래스에 @Service 를 추가한다. 
+	- @Autowired를 이용해서 sqlsession를 얻어와 조작할 dao를 찾는다. - dao를 이용해서 db작업을 한다. - 
+	root-context.xml component-scan를 추가하여 사용할 service를 등록한다. 12.controller 제작 
+	13.view 제작 14.web.xml에 한글 필터 등록 -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.JsIUSER_listDao">
+
+	<insert id="insert"> <!-- 사용자 인설트 c_date는 시스데이트로 가입날 auth는 강제로 0을 주어 사용자 -->
+		insert into USER_list
+		(user_name, email, user_id, user_pw, tel, gender,
+		birthday, c_date, auth)
+		values (#{user_name}, #{email}, #{user_id},
+		#{user_pw}, #{tel}, #{gender}, #{birthday}, sysdate, 0)
+	</insert>
+
+	<select id="checkId" parameterType="map"
+		resultType="joeun.project.dto.JsUSER_listDto"> <!-- 사용자 아이디와 비밀번호를 찾기 -->
+		select * from USER_list
+		where user_id = #{user_id}
+		and user_pw =
+		#{user_pw}
+	</select>
+
+	<select id="userLogin" parameterType="String"
+		resultType="JsUSER_listDto">
+		select * from USER_list where user_id = #{user_id}
+	</select>
+
+	<select id="selectByUserId" parameterType="String"
+		resultType="joeun.project.dto.JsUSER_listDto"> <!-- 사용자 개인정보 -->
+		select user_name, email, user_id,
+		user_pw, tel
+		from USER_list
+		where
+		user_id = #{user_id}
+	</select>
+
+	<delete id="userDelete"> <!-- 사용자 아이디 삭제 -->
+		delete from USER_list where user_id = #{user_id}
+	</delete>
+
+	<select id="checkIdExists" parameterType="String"
+		resultType="Integer"> <!-- 사용자 아이디 숫자로 변환하여 0이면 트루 1이면 펄스 0=사용가능 1=불가능 -->
+		select count(*) from USER_list where user_id = #{user_id}
+	</select>
+
+	<update id="userUpdate"><!-- 사용자 아이디로 비밀번호 변경하기 비밀번호도 현재쓴거랑 같아야 변경가능 -->
+		update USER_list
+		set user_pw = #{new_pw}
+		where user_id = #{user_id}
+	</update>
+
+	<select id="UserFindId" parameterType="map"
+		resultType="joeun.project.dto.JsUSER_listDto"> <!-- 사용자 아이디 찾기 -->
+		select user_id
+		from USER_list
+		where user_name = #{user_name}
+		and tel =
+		#{tel}
+		and email = #{email}
+	</select>
+	<select id="UserFindPw" parameterType="map"
+		resultType="joeun.project.dto.JsUSER_listDto">
+		select * from user_list
+		where user_name = #{user_name}
+		and
+		email = #{email}
+		and user_id = #{user_id}
+	</select>
+
+	<select id="userSelectAll" resultType="JsUSER_listDto">
+		select * from USER_list
+	</select>
+
+	<!-- 전체 사용자 수를 가져오는 쿼리 -->
+	<select id="getTotalUserCount" resultType="int">
+		select count(*) from user_list
+	</select>
+
+	<!-- 페이지네이션된 사용자 목록을 가져오는 쿼리 -->
+	<select id="getUsersByPage" parameterType="map"
+		resultType="JsUSER_listDto">
+		select * from user_list
+		order by user_id ASC
+		offset #{offset} rows
+		fetch next #{size} rows only
+	</select>
+
+
+	<!-- 매페어 없는 클래스를 요청하면 404 에러가 뜨므로, 올바른 매퍼 클래스를 사용해야 합니다. -->
+
+</mapper>

@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기</title>
+<style>
+.h {
+	display: flex;
+	justify-content: center;
+}
+</style>
+</head>
+<body>
+	<div class="h">
+		<h1>비밀번호 찾기</h1>
+		<br>
+		<form action="userPwFindDB" method="post">
+			이름 : <input type="text" id="user_name" name="user_name" required><br>
+			이메일:  <input type="email" id="email" name="email" required ><br>
+			<input type="submit" value="임시 비밀번호 받기" >
+		</form>
+		<c:if test="${not empty errorMessage}">
+			<p style="color: red;">${errorMessage}</p>
+		</c:if>
+	</div>
+</body>
+</html>

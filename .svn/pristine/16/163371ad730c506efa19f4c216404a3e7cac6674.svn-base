@@ -1,0 +1,37 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+.info-title {
+	display: block;
+	background: #50627F;
+	color: #fff;
+	text-align: center;
+	height: 24px;
+	line-height: 22px;
+	border-radius: 4px;
+	padding: 0px 5px;
+}
+.info-cat1 {
+	display: block;
+	background: #50627F;
+	color: #fff;
+	text-align: center;
+	height: 24px;
+	line-height: 22px;
+	border-radius: 4px;
+	padding: 0px 5px;
+}
+.info-cat2 {
+	display: block;
+	background: #E85C0D;
+	color: #fff;
+	text-align: center;
+	height: 24px;
+	line-height: 22px;
+	border-radius: 4px;
+	padding: 0px 5px;
+}
+.invisible {
+	display: none;
+}

@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>임시 번호</title>
+<style>
+.h {
+	display: flex;
+	justify-content: center;
+}
+.aa{
+	text-align: center;
+}
+</style>
+<script>
+	alert("임시 비밀번호가 생성 되었습니다.")
+</script>
+</head>
+<body>
+	<div class="h">
+		<h1>임시 비밀번호 : ${pw }</h1><br>
+			<a href="/js/userUpdate" class="aa">비밀번호 변경하기</a>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+package joeun.project.dao;
+
+import java.util.List;
+
+import joeun.project.dto.YhAccess_Facil_CodeDto;
+import joeun.project.dto.YhBolgguriDto;
+import joeun.project.dto.YhBolgguri_ReviewDto;
+import joeun.project.dto.YhBolgguri_detail_imageDto;
+
+
+
+public interface IYhBolgguri_DetailDao {
+	public YhBolgguriDto selectBolgguriById(Integer bolgguri_id)  throws Exception ;
+	public List<YhBolgguri_detail_imageDto> selectImagesByBolgguriId(Integer bolgguri_id) throws Exception;
+	public List<YhBolgguri_ReviewDto> selectReviewsByBolgguriId(Integer bolgguri_id) throws Exception;
+	public List<YhAccess_Facil_CodeDto> selectAccessFacilCodesByFacilId(Integer access_facil_id) throws Exception;
+	public void increaseLikes(Integer bolgguri_id);
+	public void decreaseLikes(Integer bolgguri_id);
+}

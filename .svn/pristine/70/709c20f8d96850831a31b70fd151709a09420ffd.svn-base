@@ -1,0 +1,20 @@
+package joeun.project.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import joeun.project.dto.MwBolgguriCategoryDto;
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+
+public interface IMwBolgguriService {
+	public ArrayList<MwBolgguriDto> selectAll(String areaCode, List<String> category, String filterNo, int offset, int pageSize, String keyword);
+	public String selectAllCount(String areaCode, List<String> category, String keyword);
+	public ArrayList<MwBolgguriDto> selectBest(String areaCode);
+	public MwBolgguriRegionDto regionSelect(String areaCode);
+	public ArrayList<MwBolgguriCategoryDto> categorySelect(List<String> category);
+	public ArrayList<MwBolgguriDto> selectRegionBest(String areaCode);
+	public ArrayList<MwBolgguriRegionDto> regionSelectAll();
+	public ArrayList<MwBolgguriCategoryDto> categorySelectAll();
+
+}

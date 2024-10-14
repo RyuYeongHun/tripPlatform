@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IAgeDao">
+	
+	<select id="getNextAgeId" resultType="int">
+    	<![CDATA[SELECT age_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	
+	<insert id="registerAge">
+        <![CDATA[INSERT INTO ages (age_id, age_name )
+        VALUES (#{age_id}, #{age_name})]]>
+    </insert>
+    
+  
+	<select id="selectAgeAll" resultType="ageDto">
+		<![CDATA[ select * from ages order by age_id asc]]>
+	</select>
+	
+	<delete id="deleteAge">
+		<![CDATA[ delete from ages where age_id = #{age_id} ]]>
+	</delete>
+
+
+</mapper>

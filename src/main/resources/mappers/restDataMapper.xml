@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.RestDataDaoI">
+
+	<insert id="insertData">
+		insert into api_bolgguri(addr1,addr2,areacode,booktour,cat1,cat2,cat3,contentid,contenttypeid,createdtime
+		,firstimage,firstimage2,cpyrhtdivcd,mapx,mapy,mlevel,modifiedtime,sigungucode,tel,title)
+		values(
+		#{addr1},#{addr2},#{areacode},#{booktour},#{cat1},#{cat2},#{cat3},#{contentid},#{contenttypeid},#{createdtime}
+		,#{firstimage},#{firstimage2},#{cpyrhtdivcd},#{mapx},#{mapy},#{mlevel},#{modifiedtime},#{sigungucode},#{tel},#{title})
+	</insert>
+	<insert id="insertAPI_jalgguri">
+		insert into api_jalgguri(addr1,addr2,areacode,benikia,cat1,cat2,cat3,contentid,contenttypeid,createdtime
+		,firstimage,firstimage2,cpyrhtDivCd,goodstay,hanok,mapx,mapy,mlevel,modifiedtime,tel,title,booktour,sigungucode)
+		values(
+		#{addr1},#{addr2},#{areacode},#{benikia}, #{cat1},#{cat2},#{cat3},#{contentid},#{contenttypeid},#{createdtime}
+		,#{firstimage},#{firstimage2},#{cpyrhtDivCd},#{goodstay},#{hanok},#{mapx},#{mapy},#{mlevel},#{modifiedtime},#{tel},#{title},#{booktour},#{sigungucode})
+	</insert>
+	<insert id="insertAPI_mukgguri">
+		insert into api_mukgguri(addr1,addr2,areacode,booktour,cat1,cat2,cat3,contentid,contenttypeid,createdtime
+		,firstimage,firstimage2,readcount,mapx,mapy,mlevel,modifiedtime,sigungucode,tel,title,zipcode)
+		values(
+		#{addr1},#{addr2},#{areacode},#{booktour},#{cat1},#{cat2},#{cat3},#{contentid},#{contenttypeid},#{createdtime}
+		,#{firstimage},#{firstimage2},#{readcount},#{mapx},#{mapy},#{mlevel},#{modifiedtime},#{sigungucode},#{tel},#{title},#{zipcode})
+	</insert>
+	<insert id="insertAPI_cat_code">
+		insert into api_cat_code(code,name,rnum)
+		values(#{code},#{name},#{rnum})
+	</insert>
+	<insert id="insertAPI_area_code">
+		insert into api_area_code(areacode,name,rnum)
+		values(#{code},#{name},#{rnum})
+	</insert>
+	<insert id="insertAPI_sigungu_code">
+		insert into api_sigungu_code(areacode, sigungu_code,name, rnum)
+		values(#{areaCode},#{sigunguCode},#{name},#{rnum})
+	</insert>
+	<insert id="insertAPI_introduce">
+		insert into API_INTRO12(CONTENTID,CONTENTTYPEID,HERITAGE1,HERITAGE2,HERITAGE3,INFOCENTER,OPENDATE,RESTDATE
+		,USESEASON,USETIME,PARKING,ACCOMCOUNT,CHKBABYCARRIAGE,CHKCREDITCARD,CHKPET,EXPAGERANGE,EXPGUIDE)
+		values( #{contentid },#{contenttypeid }
+		,#{heritage1} ,#{heritage2 } ,#{heritage3 } ,#{infocenter } ,#{opendate }
+		,#{restdate } ,#{useseason } ,#{usetime } ,#{parking } ,#{accomcount
+		},#{chkbabycarriage} ,#{chkcreditcard }
+		,#{chkpet } ,#{expagerange } ,#{expguide })
+	</insert>
+	<select id="selectContentId" resultType="String">
+		select contentid from bolgguri
+		where contenttypeid='12'
+		minus
+		(select contentid from API_INTRO12
+		union
+		select contentid from
+		api_content_id_null)
+	</select>
+	<insert id="insertAPI_IntroduceContentId">
+		insert into API_CONTENT_ID_null(CONTENTID)
+		values(#{contentid})
+	</insert>
+	<select id="selectImageContentId" resultType="Integer">
+		select contentid from bolgguri
+		minus
+		(select distinct contentid from
+		API_CONTENT_IMAGE
+		union
+		select distinct contentid from api_image_content_id_null)
+	</select>
+	<insert id="insertAPI_contentImage">
+		insert into API_CONTENT_IMAGE(CONTENTID,IMGNAME,ORIGINIMGURL,SERIALNUM,CPYRHTDIVCD,SMALLIMAGEURL)
+		values(#{contentid},#{imgname},#{originimgurl},#{serialnum},#{cpyrhtDivCd},#{smallimageurl })
+	</insert>
+	<insert id="insertAPI_imageContentIdNull">
+		insert into api_image_content_id_null(CONTENTID)
+		values(#{contentid } )
+	</insert>
+	<insert id="insertAPI_common_contentIdNull">
+		insert into api_common_content_id_null(CONTENTID)
+		values(#{contentid } )
+	</insert>
+	<insert id="insertAPI_common">
+		insert into API_COMMON(CONTENTID,CONTENTTYPEID,BOOKTOUR,CREATEDTIME,HOMEPAGE,MODIFIEDTIME,TEL,TELNAME,TITLE,FIRSTIMAGE
+		,FIRSTIMAGE2,CPYRHTDIVCD,AREACODE,SIGUNGUCODE,CAT1,CAT2,CAT3,ADDR1,ADDR2,ZIPCODE,MAPX,MAPY,MLEVEL,OVERVIEW)
+		values(#{contentid},#{contenttypeid},#{booktour},#{createdtime},#{homepage},#{modifiedtime},#{tel},#{telname},#{title},#{firstimage},#{firstimage2}
+		,#{cpyrhtDivCd},#{areacode},#{sigungucode},#{cat1},#{cat2},#{cat3},#{addr1},#{addr2},#{zipcode},#{mapx},#{mapy},#{mlevel},#{overview})
+	</insert>
+	<select id="selectCommonContentId" resultType="String">
+		select distinct contentid from bolgguri
+		where contenttypeid='12'
+		minus
+		(select distinct contentid
+		from api_common
+		union
+		select distinct contentid from api_common_content_id_null)
+	</select>
+	<select id="selectCommonContentId2" resultType="API_contentIdType">
+		select contentid, contenttypeid from bolgguri
+		where contentid in (
+		select distinct contentid from
+		bolgguri
+		minus
+		(select distinct contentid from api_common
+		union
+		select distinct contentid from api_common_content_id_null)
+		)
+	</select>
+	<select id="intro14ContentId" resultType="String">
+		select contentid from bolgguri
+		where contenttypeid = '14'
+		minus
+		(select to_number(contentid) from
+		API_INTRO14
+		union
+		select contentid from api_intro14_null)
+	</select>
+	<insert id="insertAPI_Intro14_null">
+		insert into api_intro14_null(CONTENTID)
+		values(#{contentid } )
+	</insert>
+	<insert id="insertAPI_Intro14">
+		insert into API_INTRO14(CONTENTID,CONTENTTYPEID,ACCOMCOUNTCULTURE,CHKBABYCARRIAGECULTURE,CHKCREDITCARDCULTURE,CHKPETCULTURE
+										,DISCOUNTINFO,INFOCENTERCULTURE,PARKINGCULTURE,PARKINGFEE,RESTDATECULTURE,USEFEE,USETIMECULTURE,SCALE,SPENDTIME)
+		values(#{contentid},#{contenttypeid},#{accomcountculture},#{chkbabycarriageculture},#{chkcreditcardculture},#{chkpetculture},#{discountinfo}
+						,#{infocenterculture},#{parkingculture},#{parkingfee},#{restdateculture},#{usefee},#{usetimeculture},#{scale},#{spendtime})
+	</insert>
+
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IReferChoiceDao">
+	
+	<select id="getNextReferChoiceId" resultType="int">
+    	<![CDATA[SELECT choice_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	
+	<insert id="registerReferChoice">
+        <![CDATA[INSERT INTO refer_choice (choice_id, user_id, period_id, goal_name, choiceage_id, name, choicetheme_id)
+        VALUES (#{choice_id}, #{user_id}, #{period_id}, #{goal_name}, #{choiceage_id}, #{name}, #{choicetheme_id})]]>
+    </insert>
+    
+    
+    <!-- 여러 개를 갖고 있지 않는 데이터 가져오기 사용 x-->
+    <select id="selectReferOptionOne" resultType="referChoiceDto">
+		<![CDATA[ select * from refer_choice  where choice_id = #{choice_id} order by choice_id asc]]>
+	</select>
+	
+	<!-- age_name 데이터 가져오기 -->
+    <!-- <select id="selectReferOptionAgeName" resultType="String">
+		<![CDATA[ 
+				SELECT 
+				  distinct a.age_name 
+				FROM 
+				    refer_choice rc
+				LEFT JOIN 
+				    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+				LEFT JOIN 
+				    ages a ON rca.age_id = a.age_id
+				LEFT JOIN 
+				    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+				LEFT JOIN 
+				    cat_code t ON rct.code = t.code
+				where rc.choice_id = #{choice_id} 			
+		]]>
+	</select> -->
+	
+	<!-- theme_name 데이터 가져오기 -->
+   <!--  <select id="selectReferOptionThemeName" resultType="String">
+		<![CDATA[ 
+				SELECT 
+				  distinct t.name
+				FROM 
+				    refer_choice rc
+				LEFT JOIN 
+				    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+				LEFT JOIN 
+				    ages a ON rca.age_id = a.age_id
+				LEFT JOIN 
+				    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+				LEFT JOIN 
+				    cat_code t ON rct.code = t.code
+				where rc.choice_id = #{choice_id} 			
+		]]>
+	</select> -->
+  	
+ 
+  	<!-- 해당 쿼리 사용안하고 있음 사용할 수 도 있음. -->
+	<select id="selectReferChoiceAll" resultType="referChoiceDto">
+		<![CDATA[ select * from refer_choice order by choice_id asc]]>
+	</select>
+	
+	
+	
+
+
+
+</mapper>

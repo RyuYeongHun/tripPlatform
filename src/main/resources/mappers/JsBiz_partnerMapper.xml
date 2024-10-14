@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.JsIBiz_partnerDao">
+
+ 	<select id="checkId" parameterType="map"
+		resultType="joeun.project.dto.JsBiz_partnerDto"> <!-- 사용자 아이디와 비밀번호를 찾아서 로그인하기 -->
+		select * from biz_partner
+		where biz_no = #{biz_no}
+		and biz_pw = #{biz_pw}
+	</select>
+	
+
+<!--	<select id="selectByUserId" parameterType="String"
+		resultType="joeun.project.dto.JsUSER_listDto"> 사용자 개인정보
+		SELECT user_name, email, user_id,
+		user_pw,
+		tel
+		FROM USER_list
+		WHERE
+		user_id =
+		#{user_id}
+	</select> -->
+	
+	
+	<insert id="insertBiz"> <!-- 사업자 인설트 -->
+		insert into
+		biz_partner(biz_name,email,owner,biz_no,biz_pw,tel,c_date,auth)
+		values
+		(#{biz_name},#{email},#{owner},#{biz_no},#{biz_pw},#{tel},sysdate,1)
+	</insert>
+<!-- 	<delete id="userDelete"> 사용자 아이디 삭제
+		delete from USER_list where user_id = #{user_id}
+	</delete> -->
+	
+	<select id="checkIdExists" parameterType="String"
+		resultType="Integer"> <!-- 사용자 아이디 숫자로 변환하여 0이면 트루 1이면 펄스 0=사용가능 1=불가능 -->
+		select count(*) from biz_partner where biz_no = #{biz_no}
+	</select>
+	
+<!--	<update id="userUpdate"> 사용자 아이디로 비밀번호 변경하기 비밀번호도 현재쓴거랑 같아야 변경가능
+		update user_list 
+		set user_pw = #{new_pw}
+		where user_id = #{user_id} and user_pw = #{current_pw}
+	</update> -->
+	<!-- 매페어 없는 클래스를 요청하면 404에라가 뜬다. -->
+
+</mapper>

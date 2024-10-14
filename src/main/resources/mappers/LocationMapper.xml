@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.LocationMapper">
+	<!-- 중간 지점 근처의 지점을 가져오는 쿼리 -->
+	<select id="findNearbyLocations" parameterType="map" resultType="BolgguriViewDto"> 
+<![CDATA[
+        SELECT (select b.content_type_desc from content_type b where b.contenttypeid = a.contenttypeid) type
+		    ,(select name from cat_code where code = a.cat1) cat1
+		    ,(select name from cat_code where code = a.cat2) cat2
+		    ,(select name from cat_code where code = a.cat3) cat3 
+		    , a.title
+		    ,(select name from area_code where areacode = a.areacode) area
+		    ,(select name from sigungu_code where areacode = a.areacode and sigungu_code =a.SIGUNGU_CODE) sigungu
+		    , a.mapy x, a.mapx y, a.addr1,a.tel,a.BOLGGURI_ID contentid,a.c_date, a.firstimage2 firstimage
+				FROM bolgguri a
+				WHERE contenttypeid =12
+				AND (CAT2 ='A0101'
+							OR (CAT1,CAT2,CAT3) IN (('A04','A0401', 'A04010100'), ('A04','A0401', 'A04010200')))
+				AND SQRT(POWER(mapx - #{centerY}, 2) + POWER(mapy - #{centerX}, 2)) <= #{radius}
+				AND rownum < 200
+        order by mapx, mapy
+        ]]>
+		<!-- [ SELECT title, addr1, mapx, mapy,areacode,sigungucode FROM bolgguri WHERE SQRT(POWER(mapx - #{centerX}, 2) + POWER(mapy - #{centerY}, 2)) <= #{radius} 
+			order by mapx, mapy -->
+	</select>
+	<select id="getAllGpsPoints" resultType="BolgguriViewDto">
+		<!-- SELECT x, y FROM gps_points -->
+<![CDATA[	SELECT (select b.content_type_desc from content_type b where b.contenttypeid = a.contenttypeid) type
+    ,(select name from cat_code where code = a.cat1) cat1
+    ,(select name from cat_code where code = a.cat2) cat2
+    ,(select name from cat_code where code = a.cat3) cat3 
+    , a.title
+    ,(select name from area_code where areacode = a.areacode) area
+    ,(select name from sigungu_code where areacode = a.areacode and sigungu_code =a.SIGUNGU_CODE) sigungu
+    , a.mapy x, a.mapx y, a.addr1,a.tel,a.contentid,a.c_date, a.firstimage
+FROM bolgguri a
+where areacode='1' 
+AND CAT2='A0101'
+and rownum < 10
+        ]]>
+	</select>
+	<select id="selectBolgguriCat" resultType="API_cat_code">
+		select * from cat_code
+		where code LIKE 'A0101%'
+		AND length(code)>5
+		order by code
+	</select>
+	<select id="selectMukgguriCat" resultType="API_cat_code">
+		select * from cat_code
+		where code LIKE 'A0502%'
+		AND length(code)>5
+		order by code
+	</select>
+	<select id="findNearbyMukgguri" parameterType="map" resultType="BolgguriViewDto"> 
+<![CDATA[
+        SELECT (select b.content_type_desc from content_type b where b.contenttypeid = a.contenttypeid) type
+		    ,(select name from cat_code where code = a.cat1) cat1
+		    ,(select name from cat_code where code = a.cat2) cat2
+		    ,(select name from cat_code where code = a.cat3) cat3 
+		    , a.title
+		    ,(select name from area_code where areacode = a.areacode) area
+		    ,(select name from sigungu_code where areacode = a.areacode and sigungu_code =a.SIGUNGU_CODE) sigungu
+		    , a.mapy x, a.mapx y, a.addr1,a.tel,a.BOLGGURI_ID contentid,a.c_date, a.firstimage2 firstimage
+				FROM bolgguri a
+				WHERE contenttypeid =39
+				AND cat1 = 'A05'
+				AND SQRT(POWER(mapx - #{centerY}, 2) + POWER(mapy - #{centerX}, 2)) <= #{radius}
+				AND rownum < 200
+        order by mapx, mapy
+        ]]>
+		<!-- [ SELECT title, addr1, mapx, mapy,areacode,sigungucode FROM bolgguri WHERE SQRT(POWER(mapx - #{centerX}, 2) + POWER(mapy - #{centerY}, 2)) <= #{radius} 
+			order by mapx, mapy -->
+	</select>
+</mapper>

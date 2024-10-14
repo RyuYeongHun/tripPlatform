@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.ITourPeriodDao">
+	
+	<select id="getNextTourPeriodId" resultType="int">
+    	<![CDATA[SELECT period_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	
+	<insert id="registerTourPeriod">
+        <![CDATA[INSERT INTO tour_period (period_id, period_nights ,period_name )
+        VALUES (#{period_id}, #{period_nights}, #{period_name})]]>
+    </insert>
+    
+  
+	<select id="selectTourPeriodAll" resultType="tourPeriodDto">
+		<![CDATA[ select * from tour_period order by period_id asc]]>
+	</select>
+	
+	<delete id="deleteTourPeriod">
+		<![CDATA[ delete from tour_period where period_id = #{period_id} ]]>
+	</delete>
+
+
+</mapper>

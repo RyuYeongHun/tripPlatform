@@ -1,0 +1,191 @@
+package joeun.project.controller; //미자막 이름에 웹 페이지 url에 표시됨
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+import joeun.project.dto.YhAccess_Facil_CodeDto;
+import joeun.project.dto.YhBolgguriDto;
+import joeun.project.service.IMwBolgguriService;
+import joeun.project.service.IMwCRUDService;
+import joeun.project.service.IYhBolgguri_DetailService;
+
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller // 컽트롤러 선언 어노테이션
+public class YhController {
+	@Autowired
+	private IMwBolgguriService mwService;
+	@Autowired
+	private IMwCRUDService mwService2;
+	@Autowired
+	private IYhBolgguri_DetailService yhService;
+	
+
+	private static final Logger logger = LoggerFactory.getLogger(YhController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	   @RequestMapping(value = "/", method = RequestMethod.GET)
+	   public String home(HttpSession session, HttpServletRequest request, Model model) {
+	       // 이미 로그인 상태인지 확인
+	       if (session.getAttribute("user_id") == null) {
+	           // 자동 로그인 쿠키 확인
+	           Cookie[] cookies = request.getCookies();
+	           if (cookies != null) {
+	               for (Cookie cookie : cookies) {
+	                   if ("autoLogin".equals(cookie.getName())) {
+	                       String sessionId = cookie.getValue();
+	                       // 세션 ID가 유효한지 확인하고, 사용자 정보 설정
+	                       // 실제로는 세션 저장소 또는 데이터베이스를 통해 유효성을 검사해야 합니다.
+	                       session.setAttribute("user_id", "userIdFromSessionId");
+	                   }
+	               }
+	           }
+	       }
+	       
+	       //mw 내용입니다.
+	       ArrayList<MwBolgguriRegionDto> mwBolgguriRegionDtos = mwService.regionSelectAll(); // 지역 선택 버튼 리스트
+	       ArrayList<MwBolgguriDto> mwBolgguriDtos = mwService.selectAll(null, null, "2", 0, 10);
+	       List<String> category = new ArrayList<>();
+	       category.add("A03");
+	       ArrayList<MwBolgguriDto> mwBolgguriDtos2 = mwService.selectAll(null, category, "2", 0, 10);
+	       model.addAttribute("mwBolgguriDtos", mwBolgguriDtos);
+	       model.addAttribute("mwBolgguriDtos2", mwBolgguriDtos2);
+	       model.addAttribute("mwBolgguriRegionDtos", mwBolgguriRegionDtos);
+	       
+		return "/index";
+	}
+
+	@RequestMapping(value = "/custome", method = RequestMethod.GET)
+	public String customeOverlay(Locale locale, Model model) {
+		return "yh/custome";
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(@RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id, HttpSession session, Model model) throws Exception {
+		System.out.println("test_view");
+		String user_id = (String) session.getAttribute("user_id");
+		System.out.println("user_id: "+user_id);
+	    if (bolgguri_id != null) {
+	        System.out.println(yhService.selectAll(bolgguri_id));
+	        
+	        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+	        Integer access_facil_id = bolgguriDetails.getAccess_facil_id();
+	        
+	        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+	        bolgguriDetails.setLikes(likesCount);
+	        
+	        List<YhAccess_Facil_CodeDto> accessFacilCode = yhService.getAccessFacilCode(access_facil_id);
+	        
+	        model.addAttribute("accessFacilCode", accessFacilCode);
+	        model.addAttribute("bolgguriDetails", bolgguriDetails);
+	        model.addAttribute("user_id", user_id);
+	    } else {
+	        System.out.println("null");
+	    }
+		
+		return "yh/test";
+	}
+	@RequestMapping(value = "/detail_view", method = RequestMethod.GET)
+	public String detail_view(@RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id, Model model) throws Exception {
+
+	    System.out.println("detail_view");
+	    if (bolgguri_id != null) {
+	        System.out.println(yhService.selectAll(bolgguri_id));
+	        
+	        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+	        
+	        List<YhAccess_Facil_CodeDto> accessFacilCode = yhService.getAccessFacilCode(bolgguri_id);
+	        
+	        model.addAttribute("accessFacilCode", accessFacilCode);
+	        model.addAttribute("bolgguriDetails", bolgguriDetails);
+	        // 페이지 진입 시 조회수 +1 리뷰 +1
+	        mwService2.reviewInsert(bolgguri_id);
+			mwService2.view_countUp(bolgguri_id);
+	    } else {
+	        System.out.println("null");
+	    }
+	    
+	    return "yh/detail_view";
+	}
+
+	
+	@RequestMapping(value = "/mw/crud", method = RequestMethod.GET)	
+	public String crud(@RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id) {
+		if(bolgguri_id != null) {
+			mwService2.reviewInsert(bolgguri_id);
+			mwService2.view_countUp(bolgguri_id);
+		}else {
+			System.out.println("bolgguri_id is null");
+		}
+		return "/mw/test";
+	}
+	
+	@RequestMapping(value = "/like", method = RequestMethod.POST)
+    public ResponseEntity<Integer> likePost(@RequestParam("bolgguri_id") Integer bolgguri_id, HttpSession session) throws Exception {
+        String user_id = (String) session.getAttribute("user_id");
+        
+        if (user_id == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 로그인하지 않은 경우
+        }
+        
+        yhService.likePost(bolgguri_id, user_id);
+        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+        
+        return ResponseEntity.ok(likesCount); // 좋아요 후 bolgguriDetails 반환
+    }
+
+    @RequestMapping(value = "/unlike", method = RequestMethod.POST)
+    public ResponseEntity<Integer> unlikePost(@RequestParam("bolgguri_id") Integer bolgguri_id, HttpSession session) throws Exception {
+        String user_id = (String) session.getAttribute("user_id");
+        
+        if (user_id == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 로그인하지 않은 경우
+        }
+        
+        yhService.unlikePost(bolgguri_id, user_id);
+        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+        
+        return ResponseEntity.ok(likesCount); // 싫어요 후 bolgguriDetails 반환
+    }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public String getBolgguriDetail(@RequestParam("bolgguri_id") int bolgguri_id, HttpSession session, Model model) throws Exception {
+        String user_id = (String) session.getAttribute("user_id");
+
+        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+        boolean liked = false;
+
+        if (user_id != null) {
+            liked = yhService.checkLikeExists(bolgguri_id, user_id) > 0; // 현재 유저의 좋아요 여부 확인
+        }
+
+        model.addAttribute("bolgguriDetails", bolgguriDetails);
+        model.addAttribute("liked", liked); // JSP에서 사용하기 위해 liked 추가
+
+        return "yh/test"; // JSP 페이지로 리턴
+    }
+	
+	
+}

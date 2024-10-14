@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IMwAdminDao">
+
+	<!-- 상품 총 카운트 -->
+	<select id="adminCountAll" resultType="int"> 
+		select count(*) from bolgguri
+	</select>
+	
+	<!-- 지역명  selectAll -->
+	<select id="areaSelectAll" resultType="joeun.project.dto.MwBolgguriRegionDto">
+		SELECT
+		    AREACODE,
+		    CASE
+		        WHEN AREACODE = '8' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '31' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '32' THEN SUBSTR(NAME, 1, 2)
+		        WHEN AREACODE = '33' THEN N'충북'
+		        WHEN AREACODE = '34' THEN N'충남'
+		        WHEN AREACODE = '35' THEN N'경북'
+		        WHEN AREACODE = '36' THEN N'경남'
+		        WHEN AREACODE = '37' THEN N'전북'
+		        WHEN AREACODE = '38' THEN N'전남'
+		        WHEN AREACODE = '39' THEN SUBSTR(NAME, 1, 2)
+		    ELSE NAME
+		    END AS NAME
+		FROM
+		    AREA_CODE
+		ORDER BY TO_NUMBER(AREACODE) ASC
+	</select>
+	
+	<!-- 카테고리 메뉴창 리스트 -->
+	<select id="catSelectAll" resultType="joeun.project.dto.MwBolgguriCategoryDto">
+		SELECT
+			CODE,
+			CASE
+		        WHEN CODE = 'A02' THEN SUBSTR(NAME, 1, 2)
+		        ELSE NAME
+		    END AS NAME
+		FROM CAT_CODE
+		WHERE CODE LIKE '___' AND CODE BETWEEN 'A01' AND 'A04'
+		ORDER BY CODE
+	</select>
+	
+	<!-- 검색 결과에 따른 상품 리스트 출력 -->
+	<select id="listSelect" resultType="joeun.project.dto.MwBolgguriDto">
+		SELECT
+		    B.BOLGGURI_ID,
+		    B.ADDR1,
+		    B.AREACODE,
+		    B.CAT1,
+		    B.TITLE,
+		    B.C_DATE,
+    		B.U_DATE,
+		    CASE
+		        WHEN B.AREACODE = '8' THEN SUBSTR(A.NAME, 1, 2)
+		        WHEN B.AREACODE = '32' THEN SUBSTR(A.NAME, 1, 2)
+		        WHEN B.AREACODE = '33' THEN N'충북'
+		        WHEN B.AREACODE = '34' THEN N'충남'
+		        WHEN B.AREACODE = '35' THEN N'경북'
+		        WHEN B.AREACODE = '36' THEN N'경남'
+		        WHEN B.AREACODE = '37' THEN N'전북'
+		        WHEN B.AREACODE = '38' THEN N'전남'
+		    ELSE A.NAME
+		    END AS AREATITLE,
+		    CASE
+		        WHEN C.CODE = 'A02' THEN SUBSTR(C.NAME, 1, 2)
+		        ELSE C.NAME
+		    END AS CATTITLE
+		FROM
+		    BOLGGURI b
+		LEFT JOIN
+		    AREA_CODE a
+		ON
+		    B.AREACODE = A.AREACODE
+		LEFT JOIN
+		    CAT_CODE C
+		ON
+		    B.CAT1 = C.CODE
+		OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

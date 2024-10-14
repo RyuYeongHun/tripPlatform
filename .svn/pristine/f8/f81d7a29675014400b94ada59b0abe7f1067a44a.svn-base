@@ -1,0 +1,65 @@
+package joeun.project.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import joeun.project.dao.IMwBolgguriDao;
+import joeun.project.dto.MwBolgguriCategoryDto;
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+
+@Service
+public class MwBolgguriServiceImpl implements IMwBolgguriService{
+	
+	@Autowired
+	private SqlSession sqlSession;
+
+	@Override
+	public ArrayList<MwBolgguriDto> selectAll(String areaCode, List<String> category, String filterNo, int offset, int pageSize) {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.selectAll(areaCode, category, filterNo, offset, pageSize);
+	}
+
+	@Override
+	public MwBolgguriRegionDto regionSelect(String areaCode) {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.regionSelect(areaCode);
+	}
+	
+	@Override
+	public ArrayList<MwBolgguriCategoryDto> categorySelect(List<String> category) {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.categorySelect(category);
+	}
+
+	@Override
+	public ArrayList<MwBolgguriDto> selectRec() {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.selectRec();
+	}
+
+	@Override
+	public ArrayList<MwBolgguriDto> selectRegionBest(String areaCode) {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.selectRegionBest(areaCode);
+	}
+
+	@Override
+	public ArrayList<MwBolgguriRegionDto> regionSelectAll() {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.regionSelectAll();
+	}
+
+	@Override
+	public ArrayList<MwBolgguriCategoryDto> categorySelectAll() {
+		IMwBolgguriDao dao = sqlSession.getMapper(IMwBolgguriDao.class);
+		return dao.categorySelectAll();
+	}
+
+	
+
+}

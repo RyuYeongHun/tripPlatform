@@ -1,0 +1,32 @@
+/* 중앙에 위치하는 로딩 이미지 */
+#loading {
+	display: none; /* 기본적으로 보이지 않음 */
+	position: fixed; /* 화면에 고정 */
+	top: 50%; /* 세로 중앙 */
+	left: 50%; /* 가로 중앙 */
+	transform: translate(-50%, -50%); /* 완벽하게 중앙에 위치하도록 */
+	z-index: 1000; /* 다른 요소보다 위에 표시 */
+}
+
+/* 배경 흐리게 만들기 */
+#overlay {
+	display: none; /* 기본적으로 보이지 않음 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
+	z-index: 999; /* 로딩 이미지 아래에 표시 */
+}
+.content_section {
+	width: calc(100% - 250px); /* 사이드바 너비만큼 공간 확보 */
+	margin-top: 5rem; /* 헤더 높이만큼 상단 여백 확보 */
+	margin-left: 300px; /* 사이드바 너비만큼 왼쪽 여백 확보 */
+}
+h1 {
+	background-color: yellow;
+}
+img {
+	border-radius: 10px;
+}

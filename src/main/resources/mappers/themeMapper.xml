@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IThemeDao">
+	
+
+	<insert id="registerTheme">
+        <![CDATA[INSERT INTO cat_code (code, name, rnum )
+        VALUES (#{code}, #{name},#{rnum})]]>
+    </insert>
+    
+  	
+	<select id="selectThemeAll" resultType="themeDto">
+		<![CDATA[ select * from cat_code order by code asc]]>
+	</select>
+	
+	<!-- 대분류만 추출 및 음식, 숙박, 추천 항목 제외-->
+	<select id="selectThemeFirstCat" resultType="themeDto">
+	    <![CDATA[ 
+				SELECT 
+				    c.code, 
+				    c.name,   
+				    c.rnum   
+				FROM 
+				    cat_code c
+				JOIN 
+				    (
+				        SELECT 
+				            code
+				        FROM 
+				            cat_code
+				        WHERE 
+				            LENGTH(code) = 3  
+				            AND code NOT IN ('A05', 'B02', 'C01')
+				    ) tcc 
+				ON 
+				    c.code = tcc.code
+				ORDER BY 
+				    c.code ASC
+	    ]]>
+	</select>
+	
+	<delete id="deleteTheme">
+		<![CDATA[ delete from cat_code where code = #{code} ]]>
+	</delete>
+	
+	<select id="listCount" resultType="int">
+		<![CDATA[ select count(code) from cat_code where 1=1  ]]>
+	</select>
+
+	<select id="listSearch" resultType="themeDto">
+		<![CDATA[SELECT * FROM cat_code WHERE 1=1 order by code asc OFFSET (#{page} - 1) * #{perPageNum} ROWS FETCH NEXT #{perPageNum} ROWS ONLY]]>
+	</select>
+
+</mapper>

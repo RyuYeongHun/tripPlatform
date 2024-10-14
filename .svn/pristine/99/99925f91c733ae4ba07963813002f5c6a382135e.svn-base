@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.ITourGoalDao">
+	
+	<select id="getNextTourGoalId" resultType="int">
+    	<![CDATA[SELECT goal_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	
+	<insert id="registerTourGoal">
+        <![CDATA[INSERT INTO tour_goal (goal_id, goal_name )
+        VALUES (#{goal_id}, #{goal_name})]]>
+    </insert>
+    
+  
+	<select id="selectTourGoalAll" resultType="tourGoalDto">
+		<![CDATA[ select * from tour_goal order by goal_id asc]]>
+	</select>
+	
+	<delete id="deleteTourGoal">
+		<![CDATA[ delete from tour_goal where goal_id = #{goal_id} ]]>
+	</delete>
+
+
+</mapper>

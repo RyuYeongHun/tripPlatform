@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IYhBolgguri_DetailDao">
+	<!-- ID로 BolgguriDto 조회 -->
+     <select id="selectBolgguriById" resultType="joeun.project.dto.YhBolgguriDto">
+	SELECT 
+        a.bolgguri_id, a.addr1, a.mapx, a.mapy, a.mlevel, a.tel, a.title, a.disable_parking_yn, 
+        a.access_route_yn, a.seating_yn, a.entry_route_yn, a.braille_blocks_yn, 
+        a.tactile_guide_map_yn, a.braille_signs_yn, a.bolgguri_desc, a.website, 
+        a.opening_hours, a.holidays, a.fee, a.restroom_yn, a.parking_cnt, a.pet_allow, 
+        a.image_id, a.likes, a.view_count, c.access_facil_id, a.special_note,
+        (SELECT name FROM cat_code WHERE code = a.cat1) AS cat1_name,
+        (SELECT name FROM cat_code WHERE code = a.cat2) AS cat2_name,
+        (SELECT name FROM cat_code WHERE code = a.cat3) AS cat3_name,
+        b.infocenter, b.opendate, b.restdate, b.usetime, b.parking, 
+        b.accomcount, b.chkcreditcard, b.chkpet, b.expagerange, b.expguide
+    FROM 
+        bolgguri a
+    LEFT JOIN 
+        access_facil c ON c.BOLGGURI_ID = a.bolgguri_id
+    LEFT JOIN 
+        bolgguri_intro12 b ON b.contentId = a.contentId
+        WHERE 
+        a.bolgguri_id = #{bolgguriId}
+    </select>
+    
+	<select id="selectImagesByBolgguriId" resultType="joeun.project.dto.YhBolgguri_detail_imageDto">
+    	SELECT image_data
+    	FROM bolgguri_detail_image
+    	WHERE bolgguri_id = #{bolgguri_id}
+    </select>
+    
+    <select id="selectReviewsByBolgguriId" resultType="joeun.project.dto.YhBolgguri_ReviewDto">
+    SELECT reply_content, c_date, like_cnt, u_date, del_yn, review_id, user_id, score
+    FROM bolgguri_review
+    WHERE bolgguri_id = #{bolgguri_id}
+	</select>
+	
+    <select id="selectAccessFacilCodesByFacilId" resultType="joeun.project.dto.YhAccess_Facil_CodeDto">
+    SELECT image
+    FROM access_facil_code
+    WHERE access_facil_id = #{access_facil_id}
+	</select>
+    <update id="increaseLikes">
+	UPDATE bolgguri
+	SET likes = likes + 1
+	WHERE bolgguri_id = #{bolgguri_id}
+	</update>
+	
+	<update id="decreaseLikes">
+	UPDATE bolgguri
+	SET likes = likes - 1
+	WHERE bolgguri_id = #{bolgguri_id}
+	</update>
+<!-- <select id="selectBolgguriReviews" resultType="joein.project.dto.BolgguriReviewDto">
+        SELECT 
+            b.bolgguri_id,
+            r.reply_content,
+            r.c_date,
+            r.like_cnt,
+            r.u_date,
+            r.del_yn,
+            r.review_id,
+            r.user_id,
+            r.score
+        FROM 
+            bolgguri b
+        LEFT JOIN 
+            bolgguri_review r ON b.bolgguri_id = r.bolgguri_id
+        WHERE 
+            b.bolgguri_id = #{bolgguriId}
+    </select>  -->
+    
+</mapper>
+
+
+
+
+
+
+
+
+

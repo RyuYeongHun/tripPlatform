@@ -1,0 +1,25 @@
+package joeun.project.service;
+
+import java.util.ArrayList;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import joeun.project.dao.IMwProductDao;
+import joeun.project.dto.MwProductDto;
+
+@Service
+public class MwProductServiceImpl implements IMwProductService{
+
+	@Autowired
+	private SqlSession sqlSession;
+	
+	@Override
+	public ArrayList<MwProductDto> selectAll() {
+		IMwProductDao dao=sqlSession.getMapper(IMwProductDao.class);
+		System.out.println(dao.selectAll());
+		return dao.selectAll();
+	}
+
+}

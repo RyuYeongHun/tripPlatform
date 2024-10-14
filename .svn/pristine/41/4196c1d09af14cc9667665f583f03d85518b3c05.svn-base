@@ -1,0 +1,412 @@
+package joeun.project.controller; //미자막 이름에 웹 페이지 url에 표시됨
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+import joeun.project.dto.YhAccess_Facil_CodeDto;
+import joeun.project.dto.YhBolgguriDto;
+import joeun.project.dto.YhBolgguri_ReviewDto;
+import joeun.project.dto.YhBolgguri_content_imageDto;
+import joeun.project.service.IMwBolgguriService;
+import joeun.project.service.IMwCRUDService;
+import joeun.project.service.IYhBolgguri_DetailService;
+
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller // 컽트롤러 선언 어노테이션
+public class YhController {
+	@Autowired
+	private IMwBolgguriService mwService;
+	@Autowired
+	private IMwCRUDService mwService2;
+	@Autowired
+	private IYhBolgguri_DetailService yhService;
+
+	private static final Logger logger = LoggerFactory.getLogger(YhController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	 @RequestMapping(value = "/", method = RequestMethod.GET)
+     public String home(HttpSession session, HttpServletRequest request, Model model) {
+         // 이미 로그인 상태인지 확인
+         if (session.getAttribute("user_id") == null) {
+             // 자동 로그인 쿠키 확인
+             Cookie[] cookies = request.getCookies();
+             if (cookies != null) {
+                 for (Cookie cookie : cookies) {
+                     if ("autoLogin".equals(cookie.getName())) {
+                         String sessionId = cookie.getValue();
+                         // 세션 ID가 유효한지 확인하고, 사용자 정보 설정
+                         // 실제로는 세션 저장소 또는 데이터베이스를 통해 유효성을 검사해야 합니다.
+                         session.setAttribute("user_id", "userIdFromSessionId");
+                     }
+                 }
+             }
+         }
+         
+         //mw 내용입니다.
+         ArrayList<MwBolgguriRegionDto> mwBolgguriRegionDtos = mwService.regionSelectAll(); // 지역 선택 버튼 리스트
+         ArrayList<MwBolgguriDto> mwBolgguriDtos = mwService.selectAll(null, null, "2", 0, 10, null);
+         List<String> category = new ArrayList<>();
+         category.add("A03");
+         ArrayList<MwBolgguriDto> mwBolgguriDtos2 = mwService.selectAll(null, category, "2", 0, 10, null);
+         model.addAttribute("mwBolgguriDtos", mwBolgguriDtos);
+         model.addAttribute("mwBolgguriDtos2", mwBolgguriDtos2);
+         model.addAttribute("mwBolgguriRegionDtos", mwBolgguriRegionDtos);
+         
+     return "/index";
+  }
+
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+		return "home";
+	}
+
+	@RequestMapping(value = "/custome", method = RequestMethod.GET)
+	public String customeOverlay(Locale locale, Model model) {
+		return "yh/custome";
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(
+	    @RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id,
+	    @RequestParam(value = "page", defaultValue = "1") int page, // 페이지 번호
+	    @RequestParam(value = "size", defaultValue = "5") int size, // 페이지당 리뷰 수
+	    HttpSession session,
+	    Model model
+	) throws Exception {
+	    System.out.println("test");
+	    String user_id = (String) session.getAttribute("user_id");
+	    if (bolgguri_id != null) {
+	        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+	        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+	        bolgguriDetails.setLikes(likesCount);
+	        
+	        // 리뷰 페이징 처리
+	        int totalReviewCount = yhService.countReviews(bolgguri_id); // 전체 리뷰 수
+	        int offset = (page - 1) * size;
+	        int endRow = offset + size;
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("bolgguri_id", bolgguri_id);
+	        params.put("offset", offset);
+	        params.put("endRow", endRow);
+	        
+	        // 전체 페이지 수 계산
+	        int totalPages = (int) Math.ceil((double) totalReviewCount / size);
+	        
+	        // 페이지 그룹 계산 (10개씩 페이지 번호 보여줌)
+	        int pageGroupSize = 10;
+	        int currentPageGroup = (int) Math.ceil((double) page / pageGroupSize); // 현재 페이지 그룹
+	        int startPage = (currentPageGroup - 1) * pageGroupSize + 1;  // 현재 페이지 그룹의 첫 페이지 번호
+	        int endPage = Math.min(startPage + pageGroupSize - 1, totalPages);  // 현재 페이지 그룹의 마지막 페이지 번호
+	        
+	        List<YhAccess_Facil_CodeDto> accessFacilCode = yhService.getAccessFacilCodesByFacilId(bolgguri_id);
+	        List<YhBolgguri_ReviewDto> reviewList = yhService.selectReviewWithPaging(params);
+	        System.out.println(reviewList);
+	        // 각 리뷰에 대해 좋아요 여부 확인 및 처리
+	        boolean liked = false;
+	        boolean isLiked = false;
+	        if (user_id != null) {
+	        	liked = yhService.checkLikeExists(bolgguri_id, user_id) > 0; // 현재 유저의 좋아요 여부 확인
+	        }
+	            for (YhBolgguri_ReviewDto review : reviewList) {
+	                String write_user_id = review.getUser_id();
+	                System.out.println("test,write_user_id by getUser_id: "+write_user_id);
+	                review.setUser_id(user_id);
+	                System.out.println("test,review.setUser_id by session user_id: "+user_id);
+	                isLiked = yhService.reviewLikedByUser(review);
+		            if(user_id == null) {
+		            	isLiked = false;
+		            }
+		            review.setIsLiked(isLiked);
+	                review.setWrite_user_id(write_user_id);
+	            }
+	        
+	        Double averageScore = yhService.averageScore(bolgguri_id);
+	        Integer contentId = bolgguriDetails.getContentId();
+	        List<YhBolgguri_content_imageDto> imageList = yhService.selectImages(contentId);
+	        
+	        model.addAttribute("accessFacilCode", accessFacilCode);
+	        model.addAttribute("bolgguriDetails", bolgguriDetails);
+	        model.addAttribute("user_id", user_id);
+	        model.addAttribute("reviewList", reviewList);
+	        model.addAttribute("averageScore", averageScore != null ? averageScore : 0.0);
+	        model.addAttribute("imageList", imageList);
+	        model.addAttribute("liked", liked);
+	        model.addAttribute("totalReviewCount",totalReviewCount);
+	        
+	        // 페이징 정보 추가
+	        model.addAttribute("totalPages", totalPages);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("startPage", startPage);
+	        model.addAttribute("endPage", endPage);
+	        model.addAttribute("currentPageGroup", currentPageGroup);
+	    }
+	    return "yh/test";
+	}
+	
+	@RequestMapping(value = "/detail_view", method = RequestMethod.GET)
+	public String detail_view(
+	    @RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id,
+	    @RequestParam(value = "page", defaultValue = "1") int page, // 페이지 번호
+	    @RequestParam(value = "size", defaultValue = "5") int size, // 페이지당 리뷰 수
+	    HttpSession session,
+	    Model model
+	) throws Exception {
+	    System.out.println("detail_view");
+	    String user_id = (String) session.getAttribute("user_id");
+	    if (bolgguri_id != null) {
+	        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+	        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+	        bolgguriDetails.setLikes(likesCount);
+	        
+	        // 리뷰 페이징 처리
+	        int totalReviewCount = yhService.countReviews(bolgguri_id); // 전체 리뷰 수
+	        int offset = (page - 1) * size;
+	        int endRow = offset + size;
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("bolgguri_id", bolgguri_id);
+	        params.put("offset", offset);
+	        params.put("endRow", endRow);
+	        
+	        // 전체 페이지 수 계산
+	        int totalPages = (int) Math.ceil((double) totalReviewCount / size);
+	        
+	        // 페이지 그룹 계산 (10개씩 페이지 번호 보여줌)
+	        int pageGroupSize = 10;
+	        int currentPageGroup = (int) Math.ceil((double) page / pageGroupSize); // 현재 페이지 그룹
+	        int startPage = (currentPageGroup - 1) * pageGroupSize + 1;  // 현재 페이지 그룹의 첫 페이지 번호
+	        int endPage = Math.min(startPage + pageGroupSize - 1, totalPages);  // 현재 페이지 그룹의 마지막 페이지 번호
+	        
+	        List<YhAccess_Facil_CodeDto> accessFacilCode = yhService.getAccessFacilCodesByFacilId(bolgguri_id);
+	        List<YhBolgguri_ReviewDto> reviewList = yhService.selectReviewWithPaging(params);
+	        System.out.println(reviewList);
+	        // 각 리뷰에 대해 좋아요 여부 확인 및 처리
+	        boolean liked = false;
+	        boolean isLiked = false;
+	        if (user_id != null) {
+	        	liked = yhService.checkLikeExists(bolgguri_id, user_id) > 0; // 현재 유저의 좋아요 여부 확인
+	        }
+	            for (YhBolgguri_ReviewDto review : reviewList) {
+	                String write_user_id = review.getUser_id();
+	                System.out.println("test,write_user_id by getUser_id: "+write_user_id);
+	                review.setUser_id(user_id);
+	                System.out.println("test,review.setUser_id by session user_id: "+user_id);
+	                isLiked = yhService.reviewLikedByUser(review);
+		            if(user_id == null) {
+		            	isLiked = false;
+		            }
+		            review.setIsLiked(isLiked);
+	                review.setWrite_user_id(write_user_id);
+	            }
+	        
+	        Double averageScore = yhService.averageScore(bolgguri_id);
+	        Integer contentId = bolgguriDetails.getContentId();
+	        List<YhBolgguri_content_imageDto> imageList = yhService.selectImages(contentId);
+	        
+	        model.addAttribute("accessFacilCode", accessFacilCode);
+	        model.addAttribute("bolgguriDetails", bolgguriDetails);
+	        model.addAttribute("user_id", user_id);
+	        model.addAttribute("reviewList", reviewList);
+	        model.addAttribute("averageScore", averageScore != null ? averageScore : 0.0);
+	        model.addAttribute("imageList", imageList);
+	        model.addAttribute("liked", liked);
+	        model.addAttribute("totalReviewCount",totalReviewCount);
+	        
+	        // 페이징 정보 추가
+	        model.addAttribute("totalPages", totalPages);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("startPage", startPage);
+	        model.addAttribute("endPage", endPage);
+	        model.addAttribute("currentPageGroup", currentPageGroup);
+	        mwService2.reviewInsert(bolgguri_id);	//리뷰 하나씩 자동생성
+			mwService2.view_countUp(bolgguri_id);	//조회수 증가
+	    }
+	    else {
+	    	System.out.println("null");
+	    }
+	    return "yh/detail_view";
+	}
+	
+	@RequestMapping(value = "/mw/crud", method = RequestMethod.GET)	
+	public String crud(@RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id) {
+		if(bolgguri_id != null) {
+			mwService2.reviewInsert(bolgguri_id);
+			mwService2.view_countUp(bolgguri_id);
+		}else {
+			System.out.println("bolgguri_id is null");
+		}
+		return "/mw/test";
+	}
+	
+	
+	
+	@RequestMapping(value = "/like", method = RequestMethod.GET)
+	@ResponseBody
+	public int likePost(@RequestParam("bolgguri_id") Integer bolgguri_id, HttpSession session) throws Exception {
+	    String user_id = (String) session.getAttribute("user_id");
+
+	    yhService.likePost(bolgguri_id, user_id);
+	    int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+
+	    return likesCount; // 좋아요 후 좋아요 카운트 반환
+	}
+
+	@RequestMapping(value = "/unlike", method = RequestMethod.GET)
+	@ResponseBody
+	public int unlikePost(@RequestParam("bolgguri_id") Integer bolgguri_id, HttpSession session) throws Exception {
+	    String user_id = (String) session.getAttribute("user_id");
+
+	    yhService.unlikePost(bolgguri_id, user_id);
+	    int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+
+	    return likesCount; // 싫어요 후 좋아요 카운트 반환
+	}
+
+	/*
+	 * @RequestMapping(value = "/detail", method = RequestMethod.GET) public String
+	 * getBolgguriDetail(@RequestParam("bolgguri_id") int bolgguri_id, HttpSession
+	 * session, Model model) throws Exception { String user_id = (String)
+	 * session.getAttribute("user_id");
+	 * 
+	 * YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id); boolean
+	 * liked = false;
+	 * 
+	 * if (user_id != null) { liked = yhService.checkLikeExists(bolgguri_id,
+	 * user_id) > 0; // 현재 유저의 좋아요 여부 확인 }
+	 * 
+	 * model.addAttribute("bolgguriDetails", bolgguriDetails);
+	 * model.addAttribute("liked", liked); // JSP에서 사용하기 위해 liked 추가
+	 * 
+	 * return "yh/test"; // JSP 페이지로 리턴 }
+	 */
+	    
+	    @RequestMapping(value = "/reviews", method = RequestMethod.POST)
+	    
+	    public ResponseEntity<String> review(YhBolgguri_ReviewDto reviewRequest) {
+	        try {
+		        System.out.println("리뷰 내용: " + reviewRequest);
+	            
+	            yhService.addReview(reviewRequest);
+	            
+	            return ResponseEntity.ok("리뷰가 등록되었습니다.");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 등록 중 오류가 발생했습니다.");
+	        
+	        }
+	      }
+	    
+	    @RequestMapping(value = "/review/like", produces= "application/json; charset=utf8", method = RequestMethod.GET)
+	    @ResponseBody
+	    public Integer LikeCount(@RequestParam(value = "review_id", required = false) Integer review_id, HttpSession session) throws Exception {
+	    	String user_id = (String) session.getAttribute("user_id");
+	    	System.out.println(user_id);
+	    	Integer reviewLikeCount = 0;
+	    	boolean isLiked = yhService.reviewLikedByUser2(review_id, user_id);
+	    	if(isLiked) {
+	    		yhService.removeReviewLike2(review_id, user_id);
+	    		reviewLikeCount = yhService.getReviewLikeCount(review_id);
+	    	}else {
+	    		yhService.addReviewLike2(review_id, user_id);
+	    		reviewLikeCount = yhService.getReviewLikeCount(review_id);
+	    	}
+	    	System.out.println("isLiked:" + isLiked);
+	    	System.out.println(reviewLikeCount);
+	    	
+	    	return reviewLikeCount;
+	    }
+
+	 
+		/*@RequestMapping(value = "/detail_view", method = RequestMethod.GET)
+		public String detail_view(@RequestParam(value = "bolgguri_id", required = false) Integer bolgguri_id, HttpSession session, Model model) throws Exception {
+			System.out.println("detail_view");
+			String user_id = (String) session.getAttribute("user_id");
+			System.out.println("user_id: "+user_id);
+		    if (bolgguri_id != null) {
+		    System.out.println(yhService.selectAll(bolgguri_id));
+		        
+		        YhBolgguriDto bolgguriDetails = yhService.selectAll(bolgguri_id);
+		        
+		        int likesCount = yhService.getLikesCountByBolgguriId(bolgguri_id);
+		        bolgguriDetails.setLikes(likesCount);
+		        System.out.println(bolgguriDetails);
+		        
+		        List<YhAccess_Facil_CodeDto> accessFacilCode = yhService.getAccessFacilCodesByFacilId(bolgguri_id);
+		        List<YhBolgguri_ReviewDto> reviewList = yhService.selectReview(bolgguri_id);
+		        
+		        boolean liked = false;
+		        boolean isLiked = false;
+		        if (user_id != null) {
+		            liked = yhService.checkLikeExists(bolgguri_id, user_id) > 0; // 현재 유저의 좋아요 여부 확인
+		            System.out.println(liked);
+		            System.out.println(user_id);
+		        }
+		        
+		        
+		        System.out.println("review 전");
+		        for (YhBolgguri_ReviewDto review : reviewList) {
+		        	String write_user_id = review.getUser_id();
+		        	review.setUser_id(user_id);
+		            isLiked = yhService.reviewLikedByUser(review);
+		            if(user_id == null) {
+		            	isLiked = false;
+		            }
+		            review.setIsLiked(isLiked);
+		            review.setWrite_user_id(write_user_id);
+		        }
+		        System.out.println("review 후");
+		        
+		        Double averageScore = yhService.averageScore(bolgguri_id);
+		        Integer contentId = bolgguriDetails.getContentId();
+		        List<YhBolgguri_content_imageDto> imageList = yhService.selectImages(contentId);
+
+		        
+		        model.addAttribute("accessFacilCode", accessFacilCode);
+		        model.addAttribute("bolgguriDetails", bolgguriDetails);
+		        model.addAttribute("user_id", user_id);
+		        model.addAttribute("reviewList", reviewList);
+		        model.addAttribute("averageScore", averageScore != null ? averageScore : 0.0);
+		        model.addAttribute("imageList", imageList);
+		        model.addAttribute("liked", liked);
+		        mwService2.reviewInsert(bolgguri_id);
+				mwService2.view_countUp(bolgguri_id);
+		    } else {
+		        System.out.println("null");
+		    }
+			
+			return "yh/detail_view";
+		}*/
+
+
+
+}

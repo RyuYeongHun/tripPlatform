@@ -1,0 +1,11 @@
+package joeun.project.dao;
+
+import java.util.ArrayList;
+
+import joeun.project.dto.MwProductDto;
+
+public interface IMwProductDao {
+
+	public ArrayList<MwProductDto> selectAll();
+
+}

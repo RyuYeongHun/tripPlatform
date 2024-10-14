@@ -1,0 +1,91 @@
+package joeun.project.controller; //미자막 이름에 웹 페이지 url에 표시됨
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+import joeun.project.service.IMwBolgguriService;
+
+@RestController
+@RequestMapping("/mwAjax/*")
+public class MwControllerAjax {
+	
+	@Autowired
+	private IMwBolgguriService service;
+	
+	// 지역,카테고리 선택 ajax
+	@RequestMapping(value = "/bolgguriSearch", method = RequestMethod.GET)
+	public List<MwBolgguriDto> bolgguriSearch(
+			@RequestParam(value = "areaCode", required = false) String areaCode,
+			@RequestParam(value = "cat1", required = false) List<String> cat1,
+			@RequestParam(value = "filterNo", required = false) String filterNo,
+			@RequestParam(value = "page", required = false) Integer page,
+			Model model){
+		System.out.println("컨트롤러 실행");
+		if(page == null) {
+			page = 1;
+		}
+		if (areaCode != null && areaCode.trim().isEmpty()) {
+	    	areaCode = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (cat1 != null && cat1.isEmpty()) {
+	        cat1 = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (filterNo == null || (filterNo != null && filterNo.isEmpty())) {
+	    	filterNo = "1"; // 기본 값 1로 설정
+	    }
+	    int pageSize = 20; // 업데이트당 보여줄 데이터 수 
+		int offset = (page - 1) * pageSize;
+		
+		ArrayList<MwBolgguriDto> mwBolgguriDtos = service.selectAll(areaCode, cat1, filterNo, offset, pageSize);
+		System.out.println("==========검색 결과==========");
+		System.out.println(mwBolgguriDtos);
+		System.out.println("areaCode : " + areaCode + " / cat1 : " + cat1 + " / filterNo : " + filterNo + " / page : " + page);
+		return mwBolgguriDtos;
+	}
+	
+	// 볼거리 검색 페이지 스크롤 ajax
+	@RequestMapping(value = "/scrollSearch", method = RequestMethod.GET)
+	public List<MwBolgguriDto> scrollSearch(
+			@RequestParam(value = "areaCode", required = false) String areaCode,
+			@RequestParam(value = "cat1", required = false) List<String> cat1,
+			@RequestParam(value = "filterNo", required = false) String filterNo,
+			@RequestParam(value = "page", required = false) Integer page,
+			Model model){
+		if(page == null) {
+			page = 1;
+		}
+		if (areaCode != null && areaCode.trim().isEmpty()) {
+	    	areaCode = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (cat1 != null && cat1.isEmpty()) {
+	        cat1 = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (filterNo == null || (filterNo != null && filterNo.isEmpty())) {
+	    	filterNo = "1"; // 기본 값 1로 설정
+	    }
+		int pageSize = 20; // 업데이트당 보여줄 데이터 수 
+		int offset = (page - 1) * pageSize;
+		
+		ArrayList<MwBolgguriDto> mwBolgguriDtos = service.selectAll(areaCode, cat1, filterNo, offset, pageSize);
+		System.out.println("==========검색 결과==========");
+		System.out.println(mwBolgguriDtos);
+		System.out.println("areaCode : " + areaCode + " / cat1 : " + cat1 + " / filterNo : " + filterNo);
+		return mwBolgguriDtos;
+	}
+	
+}

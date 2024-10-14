@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IAgeChoiceDao">
+	
+	<select id="getNextAgeChoiceId" resultType="int">
+    	<![CDATA[SELECT choiceage_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	<insert id="registerAgeChoice">
+        <![CDATA[INSERT INTO refer_choice_age (choiceage_id, choice_id, age_id )
+        VALUES (#{choiceage_id}, #{choice_id} , #{age_id})]]>
+    </insert>
+    
+ 
+</mapper>

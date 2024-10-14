@@ -1,0 +1,25 @@
+package joeun.project.service;
+
+import java.util.ArrayList;
+
+import org.apache.ibatis.annotations.Param;
+
+import joeun.project.dto.JsUSER_listDto;
+
+public interface JsIUSER_listService {
+   public void insert(JsUSER_listDto dto) throws Exception;
+   
+   public JsUSER_listDto getUserInfo(String user_id) throws Exception;
+   
+   public JsUSER_listDto checkId(@Param("user_id") String user_id, 
+             @Param("user_pw") String user_pw);
+   boolean isIdAvailable(String user_id);
+
+   public void userDelete(String userId) throws Exception;
+
+   public void userUpdate(String user_id, String new_pw,String current_pw); //사용자 비밀번호 변경 id가 같은 값의 새로운비밀번호
+ 
+
+   
+   
+}

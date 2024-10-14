@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.HsFreeBoardDao">
+
+	<!-- 게시글 삽입 -->
+	<insert id="insert"
+		parameterType="joeun.project.dto.HsFreeBoardDto">
+		INSERT INTO FREEBOARD (id, title, content, writer,
+		created_at, updated_at,
+		views, likes, is_deleted)
+		VALUES
+		(freeboard_seq.NEXTVAL, #{title}, #{content}, #{writer},
+		sysdate,sysdate, #{views}, #{likes}, 'N')
+	</insert>
+
+	<!-- 게시글 ID로 조회 -->
+	<select id="selectById" parameterType="Integer"
+		resultType="joeun.project.dto.HsFreeBoardDto">
+		SELECT id, title, content, writer, created_at AS
+		created_At, updated_at AS
+		updated_At,
+		views, likes, is_deleted AS
+		is_Deleted
+		FROM FREEBOARD
+		WHERE id = #{id}
+	</select>
+
+	<!-- 전체 게시글 조회 -->
+	<select id="selectAll"
+		resultType="joeun.project.dto.HsFreeBoardDto">
+		SELECT id, title, content, writer, created_at AS
+		created_At, updated_at AS
+		updated_At,
+		views, likes, is_deleted AS
+		is_Deleted
+		FROM FREEBOARD
+	</select>
+
+	<!-- 게시글 수정 -->
+	<update id="update"
+		parameterType="joeun.project.dto.HsFreeBoardDto">
+		UPDATE FREEBOARD
+		SET title = #{title}, content =
+		#{content}, writer = #{writer},
+		updated_at = sysdate,
+		is_deleted =
+		#{is_Deleted}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 게시글 삭제 -->
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM FREEBOARD WHERE id
+		= #{id}
+	</delete>
+
+	<!-- 페이지네이션 적용된 전체 게시글 조회 -->
+	<select id="selectAllWithPagination" parameterType="map"
+		resultType="joeun.project.dto.HsFreeBoardDto">
+		SELECT *
+		FROM FREEBOARD
+		WHERE is_deleted = 'N'
+		ORDER BY
+		created_at DESC
+		OFFSET #{offset} ROWS
+		FETCH NEXT #{limit} ROWS ONLY
+	</select>
+
+	<!-- 게시글 총 수 조회 -->
+	<select id="getTotalBoardCount" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		FREEBOARD
+		WHERE is_deleted = 'N'
+	</select>
+
+	<update id="incrementViews">
+		UPDATE FREEBOARD
+		SET VIEWS = VIEWS + 1
+		WHERE ID = #{id}
+	</update>
+
+	<update id="incrementLikes">
+		UPDATE FREEBOARD
+		SET LIKES = LIKES + 1
+		WHERE ID = #{id}
+	</update>
+
+
+</mapper>

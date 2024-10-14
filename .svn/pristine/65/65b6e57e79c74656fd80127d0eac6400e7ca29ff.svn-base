@@ -1,0 +1,11 @@
+package joeun.project.service;
+
+import java.util.ArrayList;
+
+import joeun.project.dto.MwProductDto;
+
+public interface IMwProductService {
+
+	ArrayList<MwProductDto> selectAll();
+	
+}

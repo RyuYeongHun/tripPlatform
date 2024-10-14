@@ -1,0 +1,28 @@
+package joeun.project.service;
+
+import java.util.List;
+
+import joeun.project.dto.YhAccess_Facil_CodeDto;
+import joeun.project.dto.YhBolgguriDto;
+import joeun.project.dto.YhBolgguri_ReviewDto;
+import joeun.project.dto.YhBolgguri_content_imageDto;
+
+
+public interface IYhBolgguri_DetailService {
+	//BolgguriDto read
+	public YhBolgguriDto selectAll(Integer bolgguri_id) throws Exception;
+	public List<YhBolgguri_content_imageDto> selectImages(Integer contentId) throws Exception;
+	public List<YhBolgguri_ReviewDto> selectReview(Integer bolgguri_id) throws Exception;
+	public List<YhAccess_Facil_CodeDto> getAccessFacilCodesByFacilId(Integer accessFacilId) throws Exception;
+	public void likePost(Integer bolgguri_id, String user_id) throws Exception; 
+	public void unlikePost(Integer bolgguri_id, String user_id) throws Exception;
+	public int checkLikeExists(Integer bolgguri_id, String user_id) throws Exception;
+	public int getLikesCountByBolgguriId(Integer bolgguri_id) throws Exception;
+	public void addReview(YhBolgguri_ReviewDto reviewDto) throws Exception;
+	public Double averageScore(Integer bolgguri_id) throws Exception;
+	/* public void increaseLikeCount(Integer review_id) throws Exception; */
+	public boolean reviewLikedByUser(YhBolgguri_ReviewDto reviewLike) throws Exception;
+	public void removeReviewLike(YhBolgguri_ReviewDto reviewLike, String user_id) throws Exception;
+	public void addReviewLike(YhBolgguri_ReviewDto reviewLike, String user_id) throws Exception;
+	/* public int reviewLikeCount(Integer review_id) throws Exception; */
+}

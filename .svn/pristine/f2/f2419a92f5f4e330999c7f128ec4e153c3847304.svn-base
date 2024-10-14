@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IRegionDao">
+	
+
+	<insert id="registerRegion">
+        <![CDATA[INSERT INTO area_code (areacode, rnum,name )
+        VALUES (#{areacode}, #{rnum}, #{name})]]>
+    </insert>
+    
+  
+	<select id="selectRegionAll" resultType="regionDto">
+		<![CDATA[ select * from area_code order by areacode asc]]>
+	</select>
+	
+	<delete id="deleteRegion">
+		<![CDATA[ delete from area_code where areacode = #{areacode} ]]>
+	</delete>
+
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.HsplusDao">
+
+    <insert id="insert">
+        insert into plus(query_id,id, content, content_answer, suc)
+        values(query_id.nextval,#{id}, #{content, jdbcType=VARCHAR}, null,'대기중')
+    </insert>
+    
+    <select id="select" resultType="joeun.project.dto.HsplusDto">
+    	SELECT * FROM plus order by suc
+	</select>
+	
+	<update id="update">
+		UPDATE plus
+		SET content_answer = #{content_answer}, suc = #{suc}
+		WHERE id = #{id} AND content = #{content}
+	</update>
+	
+	<update id="update_user">
+		update plus
+		set content = #{content} where id = #{id} AND query_id = #{query_id}
+	</update>
+	
+	<delete id="delete_user" parameterType="map">
+    	DELETE FROM plus
+    	WHERE query_id = #{query_id} AND id = #{id}
+	</delete>
+
+
+
+
+</mapper>

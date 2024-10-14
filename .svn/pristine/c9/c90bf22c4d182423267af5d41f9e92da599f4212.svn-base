@@ -1,0 +1,63 @@
+package joeun.project.controller; //미자막 이름에 웹 페이지 url에 표시됨
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import joeun.project.dto.MwBolgguriCategoryDto;
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+import joeun.project.service.IMwBolgguriService;
+
+@Controller  //컽트롤러 선언 어노테이션 
+@RequestMapping("/mw/*")
+public class MwController {
+	
+	@Autowired
+	private IMwBolgguriService service;
+	
+	// 볼거리 메인 페이지
+	@RequestMapping(value = "/bolgguriMain", method = RequestMethod.GET)	
+	public void bolgguriMain(
+			@RequestParam(value = "areaCode", required = false) String areaCode,
+			@RequestParam(value = "cat1", required = false) List<String> cat1,
+			@RequestParam(value = "filterNo", required = false) String filterNo,
+			@RequestParam(value = "page", required = false) Integer page,
+			Model model) {
+		System.out.println("컨트롤러 실행");
+		if(page == null) {
+			page = 1;
+		}
+		if (areaCode != null && areaCode.trim().isEmpty()) {
+	    	areaCode = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (cat1 != null && cat1.isEmpty()) {
+	        cat1 = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (filterNo == null || (filterNo != null && filterNo.isEmpty())) {
+	    	filterNo = "1"; // 기본 값 1로 설정
+	    }
+	    int pageSize = 20; // 업데이트당 보여줄 데이터 수 
+		int offset = (page - 1) * pageSize;
+		ArrayList<MwBolgguriDto> mwBolgguriDtos = service.selectAll(areaCode, cat1, filterNo, offset, pageSize);
+		model.addAttribute("mwBolgguriDtos", mwBolgguriDtos);
+		model.addAttribute("selectAllCount", service.selectAllCount(areaCode, cat1));
+		model.addAttribute("bestDtos", service.selectBest(null));
+		model.addAttribute("mwBolgguriRegionDtos", service.regionSelectAll()); // 지역검색 창에 출력할 지역명 
+		model.addAttribute("mwBolgguriCategoryDtos", service.categorySelectAll()); // 카테고리 검색 창에 출력할 카테고리명
+	}
+	
+	// 볼거리 메인 지역 검색 버튼
+	@RequestMapping(value = "/mainRegionCategorySelect", method = RequestMethod.GET)
+	public void bolgguriSelectBtn(Model model) {
+		model.addAttribute("mwBolgguriRegionDtos", service.regionSelectAll()); // 지역검색 창에 출력할 지역명 
+		model.addAttribute("mwBolgguriCategoryDtos", service.categorySelectAll()); // 카테고리 검색 창에 출력할 카테고리명
+	}
+}

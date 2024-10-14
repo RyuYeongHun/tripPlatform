@@ -1,0 +1,122 @@
+package joeun.project.controller; //미자막 이름에 웹 페이지 url에 표시됨
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import joeun.project.dto.MwBolgguriCategoryDto;
+import joeun.project.dto.MwBolgguriDto;
+import joeun.project.dto.MwBolgguriRegionDto;
+import joeun.project.service.IMwBolgguriService;
+
+@Controller  //컽트롤러 선언 어노테이션 
+@RequestMapping("/mw/*")
+public class MwController {
+	
+	@Autowired
+	private IMwBolgguriService service;
+	
+	// 볼거리 메인 페이지
+	@RequestMapping(value = "/bolgguriMain", method = RequestMethod.GET)	
+	public String bolgguriMain(@RequestParam(value = "areaCode", required = false) String areaCode, Model model) {
+		if(areaCode == null) {
+			areaCode = "1"; // 기본 지역 서울로 설정
+		}
+		ArrayList<MwBolgguriDto> recMwBolgguriDtos = service.selectRec();
+		ArrayList<MwBolgguriDto> regionMwBolgguriDtos = service.selectRegionBest(areaCode);
+		model.addAttribute("recMwBolgguriDtos", recMwBolgguriDtos);
+		model.addAttribute("regionMwBolgguriDtos", regionMwBolgguriDtos);
+		model.addAttribute("mwBolgguriRegionDtos", service.regionSelectAll()); // 지역검색 창에 출력할 지역명 
+		model.addAttribute("mwBolgguriCategoryDtos", service.categorySelectAll()); // 카테고리 검색 창에 출력할 카테고리명
+		System.out.println("==========추천 관광지==========\n" + recMwBolgguriDtos);
+		System.out.println("==========지역별 Best 관광지==========\n" + regionMwBolgguriDtos);
+		
+		return "/mw/test";
+	}
+	
+	// 볼거리 메인 지역 검색 버튼
+	@RequestMapping(value = "/mainRegionCategorySelect", method = RequestMethod.GET)
+	public void bolgguriSelectBtn(Model model) {
+		model.addAttribute("mwBolgguriRegionDtos", service.regionSelectAll()); // 지역검색 창에 출력할 지역명 
+		model.addAttribute("mwBolgguriCategoryDtos", service.categorySelectAll()); // 카테고리 검색 창에 출력할 카테고리명
+	}
+	
+	
+	// 볼거리 메인 페이지 지역별 Best
+	@RequestMapping(value = "/RegionBest", method = RequestMethod.GET)
+	@ResponseBody
+	public ArrayList<MwBolgguriDto> bolgguriMainRegionBest(@RequestParam(value = "areaCode", required = false) String areaCode){
+		if(areaCode == null) {
+			System.out.println("areaCode is null");
+			areaCode = "1";
+		}else {
+			System.out.println("areaCode : " + areaCode);
+		}
+		
+		return service.selectRegionBest(areaCode);
+	}
+	
+	// 볼거리 검색 페이지
+	@RequestMapping(value = "/bolgguriSearch", method = RequestMethod.GET)
+	public void bolgguriSearch(
+		@RequestParam(value="areaCode", required=false) String areaCode, 
+		@RequestParam(value="category", required=false) List<String> cat1,
+		@RequestParam(value = "filterNo", required = false) String filterNo,
+		@RequestParam(value = "page", required = false) Integer page,
+		Model model) {
+		
+		// 빈 문자열 또는 빈 리스트인 경우 처리
+	    if (areaCode != null && areaCode.trim().isEmpty()) {
+	    	areaCode = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    if (cat1 != null && cat1.isEmpty()) {
+	    	cat1 = null; // null로 처리하여 필터링하지 않도록 설정
+	    }
+	    String filterName = "인기순";
+	    if(filterNo == null || filterNo.trim().isEmpty()) {
+	    	filterNo = "1";
+	    	filterName = "기본순";
+	    }
+		ArrayList<MwBolgguriDto> mwBolgguriDtos;
+		MwBolgguriRegionDto regionSelect = null;
+		ArrayList<MwBolgguriCategoryDto> categorySelect = null;
+		boolean isAllChecked = false;
+		int offset = 0;
+		int pageSize = 20;
+		mwBolgguriDtos = service.selectAll(areaCode, cat1, filterNo, offset, pageSize);
+		
+		if(areaCode != null && !areaCode.trim().isEmpty()) { // 선택한 지역 출력
+			regionSelect = service.regionSelect(areaCode);
+			model.addAttribute("areaCode", areaCode);
+			model.addAttribute("regionSelect", regionSelect);
+		}
+		if(cat1 != null && !cat1.isEmpty()) { // 선택한 카테고리 출력
+			categorySelect = service.categorySelect(cat1);
+			System.out.println(categorySelect.size());
+			if(categorySelect.size() == 7) {
+				isAllChecked = true;
+			}
+			model.addAttribute("isAllChecked", isAllChecked);
+			model.addAttribute("categorySelect", categorySelect);
+			model.addAttribute("cat1", cat1);
+		}
+		
+		model.addAttribute("filterName", filterName);
+		model.addAttribute("mwBolgguriRegionDtos", service.regionSelectAll()); // 지역검색 창에 출력할 지역
+		model.addAttribute("mwBolgguriCategoryDtos", service.categorySelectAll()); // 카테고리 검색 창에 출력할 카테고리
+		model.addAttribute("mwBolgguriDtosLength", mwBolgguriDtos.size()); // 검색한 데이터 갯수
+		model.addAttribute("mwBolgguriDtos", mwBolgguriDtos);
+		
+		System.out.println("==========검색 결과==========");
+		System.out.println(mwBolgguriDtos);
+		System.out.println("검색수 : " + mwBolgguriDtos.size() + " / 지역코드 : " + areaCode + " / 지역명 : " + regionSelect + " / 카테고리 : " + cat1 + " / 카테고리명 : " + categorySelect + " / 필터선택 : " + filterNo + "번 " + filterName);
+	}
+	
+}

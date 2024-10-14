@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IProductDayRandomDao">
+	
+	<select id="getNextRandomId" resultType="int">
+    	<![CDATA[SELECT random_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	<insert id="registerProductDayRandom">
+        <![CDATA[INSERT INTO ProductDay_Random (random_id, user_id , period_id )
+        VALUES (#{random_id}, #{user_id}, #{period_id})]]>
+    </insert>
+    
+
+
+</mapper>

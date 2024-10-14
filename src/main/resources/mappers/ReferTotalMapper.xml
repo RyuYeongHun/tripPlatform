@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IReferTotalDao">
+	
+	
+	<select id="getNextReferTotalId" resultType="int">
+    	<![CDATA[SELECT refertotal_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	<!-- 사용자가 선택한 테마, 지역에 맞는 모든 상품 데이터들 -->
+	<select id="selectReferOptionProductList" resultType="referTotalDto">
+	<![CDATA[ 
+			SELECT 
+				B.*,  
+				R.REVIEW_COUNT,  
+				R.AVG_SCORE, 
+				C.*,  
+				A.*,  
+				rc.* 
+			FROM 
+				BOLGGURI B
+			LEFT JOIN
+				(SELECT
+					BOLGGURI_ID,
+					COUNT(*) AS REVIEW_COUNT,
+					ROUND(AVG(SCORE), 1) AS AVG_SCORE
+				FROM
+					BOLGGURI_REVIEW
+				GROUP BY
+					BOLGGURI_ID) R
+			ON
+				B.BOLGGURI_ID = R.BOLGGURI_ID
+			LEFT JOIN
+				CAT_CODE C
+			ON
+				B.CAT1 = C.CODE
+			LEFT JOIN
+				AREA_CODE A
+			ON
+				B.AREACODE = A.AREACODE
+			LEFT JOIN
+				refer_choice_theme rct
+			ON
+				C.CODE = rct.CODE
+			LEFT JOIN
+				refer_choice rc
+			ON
+				rct.CHOICETHEME_ID = rc.CHOICETHEME_ID
+			INNER JOIN (
+				SELECT 
+					rc2.CHOICETHEME_ID,
+					A2.AREACODE AS AREA_JOIN_AREACODE  
+				FROM 
+					refer_choice rc2
+				INNER JOIN 
+					AREA_CODE A2 ON rc2.name = A2.name
+			) RC_A 
+			ON 
+				B.AREACODE = RC_A.AREA_JOIN_AREACODE  
+			WHERE 
+				rc.CHOICE_ID = #{CHOICE_ID}
+				AND C.CODE IN (
+					SELECT T.CODE
+					FROM CAT_CODE T
+					LEFT JOIN refer_choice_theme rct2 ON T.CODE = rct2.CODE
+					LEFT JOIN refer_choice rc2 ON rct2.CHOICETHEME_ID = rc2.CHOICETHEME_ID
+					WHERE rc2.CHOICE_ID = #{CHOICE_ID}
+				)
+				AND rc.name = A.name  
+			ORDER BY
+				B.BOLGGURI_ID
+		]]>
+	</select> 
+	
+	
+	
+		
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물 중 계정정보, 여행 목적, 지역, 기간 -->
+	<select id="selectListEtc" resultType="referenceProductDto">
+	<![CDATA[ 
+			SELECT
+			    pdr.user_id,
+			    MAX(rc.goal_name) AS goal_name,  
+			    MAX(rc.name) AS region_name,            
+			    MAX(tp.period_name) AS period_name  
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code
+			LEFT JOIN
+				    ages a ON rca.age_id = a.age_id    
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+			GROUP BY
+			    pdr.user_id
+		]]>
+	</select>
+	
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물 중 테마들 -->
+	<select id="selectListTheme" resultType="String">
+	<![CDATA[ 
+			SELECT DISTINCT
+			    cc.name
+			    
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code
+			LEFT JOIN
+			    ages a ON rca.age_id = a.age_id    
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+		]]>
+	</select>
+	
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물 중 연령대들 -->
+	<select id="selectListAge" resultType="String">
+	<![CDATA[ 
+			SELECT DISTINCT
+			    a.age_name
+			    
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code
+			LEFT JOIN
+			    ages a ON rca.age_id = a.age_id    
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+		]]>
+	</select>
+	
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물 중 일차 -->
+	<select id="selectListAssignDay" resultType="String">
+	<![CDATA[ 
+			SELECT DISTINCT
+			    da.assign_day
+			    
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code
+			LEFT JOIN
+			    ages a ON rca.age_id = a.age_id    
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+		]]>
+	</select>
+	
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물 일차별 상품들 -->
+	<select id="selectListPeriodProduct" resultType="referenceProductDto">
+	<![CDATA[ 
+			SELECT
+			    pdr.random_id,
+			    pdr.user_id,
+			    pdr.period_id,
+			    da.day_id AS da_day_id,
+			    da.random_id AS da_random_id,
+			    da.day_number,
+			    da.assign_day,
+			    rt.refertotal_id,
+			    rt.bolgguri_id,
+			    rt.choice_id,
+			    rc.*,
+			    rct.*,
+			    tp.*,
+			    b.*,
+			    ac.*,
+			    cc.name AS theme
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code  
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+			ORDER BY
+			    da.day_number,   
+			    rt.refertotal_id 
+		]]>
+	</select>
+	
+	
+	<!-- 연령대 매칭 할 경우 고려해야함 -->
+	<!-- <select id="selectListPeriodProduct" resultType="referenceProductDto">
+	<![CDATA[ 
+			SELECT
+			    pdr.random_id,
+			    pdr.user_id,
+			    pdr.period_id,
+			    da.day_id AS da_day_id,
+			    da.random_id AS da_random_id,
+			    da.day_number,
+			    da.assign_day,
+			    rt.refertotal_id,
+			    rt.bolgguri_id,
+			    rt.choice_id,
+			    rc.*,
+			    rct.*,
+			    rca.*,
+			    tp.*,
+			    b.*,
+			    ac.*,
+			    cc.name AS theme,
+			    a.age_name AS refer_age_name 
+			FROM
+			    ProductDay_Random pdr
+			JOIN
+			    Day_Assignment da ON pdr.random_id = da.random_id
+			JOIN
+			    Refer_Total rt ON da.day_id = rt.day_id
+			LEFT JOIN
+			    refer_choice rc ON rt.choice_id = rc.choice_id
+			LEFT JOIN
+			    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+			LEFT JOIN
+			    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+			LEFT JOIN
+			    tour_period tp ON rc.period_id = tp.period_id
+			LEFT JOIN
+			    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+			LEFT JOIN
+			    area_code ac ON b.areacode = ac.areacode
+			LEFT JOIN
+			    cat_code cc ON b.cat1 = cc.code
+			LEFT JOIN
+			    ages a ON rca.age_id = a.age_id  
+			WHERE
+			    rc.name = ac.name
+			    AND rct.code = cc.code
+			    AND rc.choice_id = #{choice_id}
+			ORDER BY
+			    da.day_number,   
+			    rt.refertotal_id 
+		]]>
+	</select> -->
+	
+	
+	
+	
+	
+	 
+	
+	
+	
+	<insert id="registerReferTotal">
+        <![CDATA[INSERT INTO Refer_Total (refertotal_id, day_id, bolgguri_id, choice_id)
+        VALUES (#{refertotal_id}, #{day_id}, #{bolgguri_id}, #{choice_id})]]>
+    </insert>
+	
+	
+	<!-- 랜덤 까지 돌린 후 최종 결과물-->
+    <select id="selectChoice" resultType="referTotalDto">
+		<![CDATA[ 
+				SELECT
+				    pdr.random_id,
+				    pdr.user_id,
+				    pdr.period_id,
+				    da.day_id AS da_day_id,
+				    da.random_id AS da_random_id,
+				    da.day_number,
+				    da.assign_day,
+				    rt.refertotal_id,
+				    rt.bolgguri_id,
+				    rt.choice_id,
+				    rc.*,
+				    rct.*,
+				    rca.*,
+				    tp.*,
+				    b.*,
+				    ac.*,
+				    cc.*,
+				    a.age_name AS refer_age_name  
+				FROM
+				    ProductDay_Random pdr
+				JOIN
+				    Day_Assignment da ON pdr.random_id = da.random_id
+				JOIN
+				    Refer_Total rt ON da.day_id = rt.day_id
+				LEFT JOIN
+				    refer_choice rc ON rt.choice_id = rc.choice_id
+				LEFT JOIN
+				    refer_choice_theme rct ON rc.choicetheme_id = rct.choicetheme_id
+				LEFT JOIN
+				    refer_choice_age rca ON rc.choiceage_id = rca.choiceage_id
+				LEFT JOIN
+				    tour_period tp ON rc.period_id = tp.period_id
+				LEFT JOIN
+				    bolgguri b ON rt.bolgguri_id = b.bolgguri_id
+				LEFT JOIN
+				    area_code ac ON b.areacode = ac.areacode
+				LEFT JOIN
+				    cat_code cc ON b.cat1 = cc.code
+				LEFT JOIN
+				    ages a ON rca.age_id = a.age_id  -- 조인 추가
+				WHERE
+				    rc.name = ac.name
+				    AND rct.code = cc.code
+				    AND rc.choice_id = #{choice_id}
+		]]>
+	</select>
+	
+	
+	
+	
+	
+</mapper>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

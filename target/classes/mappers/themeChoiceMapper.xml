@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="joeun.project.dao.IThemeChoiceDao">
+	
+	<select id="getNextThemeChoiceId" resultType="int">
+    	<![CDATA[SELECT choicetheme_id.NEXTVAL FROM dual]]>
+	</select>
+	
+	<insert id="registerThemeChoice" >
+        <![CDATA[INSERT INTO refer_choice_theme (choicetheme_id, choice_id, code )
+        VALUES (#{choicetheme_id}, #{choice_id} , #{code})]]>
+    </insert>
+    
+ 
+</mapper>
