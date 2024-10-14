@@ -3,30 +3,30 @@
 
 # 기술스택
  Tools
-  VisualStudioCode
-  STS
-  oracle
-  SVN
-  Figma
+  VisualStudioCode,
+  STS,
+  oracle,
+  SVN,
+  Figma,
   git
 
 # Developer Language & FrameWork
-  html5
-  css3
-  JavaScript
-  jQuery
-  Java
-  Spring
-  MyBatis
+  html5,
+  css3,
+  JavaScript,
+  jQuery,
+  Java,
+  Spring,
+  MyBatis,
 
 # Database & Server
-  Oracle
+  Oracle,
   Apatche
 
 # API
-  KaKaomap API
-  KaKaomobility
-  naver
+  KaKaomap API,
+  KaKaomobility,
+  naver,
   공공데이터
 
 # Process Diagram
