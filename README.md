@@ -67,6 +67,12 @@ https://aws.bluelegend.net
 # 🧩ERD
 ![image](https://github.com/user-attachments/assets/8bdc4ad1-4c4d-4f26-b697-15f871d6b0bf)
 
+# 🎨레이아웃 및 디자인
+![image](https://github.com/user-attachments/assets/5e218127-497e-4bd9-8f4a-8fef9ac30564)
+
+# ✏UI/UX설계
+![image](https://github.com/user-attachments/assets/894796ef-9f84-4cb4-9299-164d8e92d9dd)
+
 # 상세페이지 01
 ![image](https://github.com/user-attachments/assets/ec503260-4234-4d8b-9404-c24598e20025)
 
