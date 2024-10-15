@@ -10,7 +10,7 @@ https://aws.bluelegend.net
 사용자 UI의 중점을 맞춘 여행 추천 플랫폼 방방곡곡입니다.</br>
 사용자의 여행 목적, 일정, 테마, 지역에 따른 상황에 맞게 여행 코스 추천을 해주는 플랫폼입니다.</br>
 사용자가 보고있는 관광지 근처 5km를 기준으로 주변 관광지를 지도에서 확인할 수 있습니다.</br>
-상세페이지에서 가고자 하는 관광지에 정보등을 확인할 수 있으며, 타 사용자의 리뷰와 찜 개수, 조회수등을 확인하여 인기를 확인할 수 있습니다.</br>
+상세페이지에서 가고자 하는 관광지에 정보를 확인할 수 있으며, 타 사용자의 리뷰와 찜 개수, 조회수 등을 확인하여 인기를 확인할 수 있습니다.</br>
 또한, 아래 지도에서 현재 보고있는 관광지, 주변 관광지의 길찾기를 제공합니다.
 
 # 👨‍👨‍👦팀 소개
@@ -28,25 +28,32 @@ https://aws.bluelegend.net
 
 # 💻기술스택  
 ## Tools
-  VisualStudioCode,
-  STS,
-  oracle,
-  SVN,
-  Figma,
-  git
+<div>
+  <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat-square&logo=Visual Studio Code&logoColor=white"/>
+  <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
+  <img src="https://img.shields.io/badge/subversion-809CC9?style=flat-square&logo=subversion&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
+  <p><code><img height="40" src="https://jtuts.com/wp-content/uploads/2016/03/spring-tool-suite-project-logo.png" style="max-width: 100%;"></code></p>
+</div>
 
 ## Developer Language & FrameWork
-  html5,
-  css3,
-  JavaScript,
-  jQuery,
-  Java,
-  Spring,
-  MyBatis,
+<div>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
+  <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JSON-000000?style=flat-square&logo=json&logoColor=white"/>
+  <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+  <p><code><img height="40" src="https://avatars.githubusercontent.com/u/1483254?s=200&v=4" style="max-width: 100%;"></code></p>
+</div>
 
 ## Database & Server
-  Oracle,
-  Apatche
+<div>
+  <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
+  <img src="https://img.shields.io/badge/apachetomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=black"/>
+</div>
 
 ## API
   KaKaomap API,
