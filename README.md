@@ -1,7 +1,33 @@
-# tripPlatform
+![image](https://github.com/user-attachments/assets/9f59535b-53f8-48f8-9630-65cf1adb38e6)
+
+# ✈방방곡곡
 여행추천 플랫폼
 
-# 기술스택  Tools
+# 🌎배포주소
+https://aws.bluelegend.net
+
+# 📋프로젝트 소개
+사용자 UI의 중점을 맞춘 여행 추천 플랫폼 방방곡곡입니다.</br>
+사용자의 여행 목적, 일정, 테마, 지역에 따른 상황에 맞게 여행 코스 추천을 해주는 플랫폼입니다.</br>
+사용자가 보고있는 관광지 근처 5km를 기준으로 주변 관광지를 지도에서 확인할 수 있습니다.</br>
+상세페이지에서 가고자 하는 관광지에 정보등을 확인할 수 있으며, 타 사용자의 리뷰와 찜 개수, 조회수등을 확인하여 인기를 확인할 수 있습니다.</br>
+또한, 아래 지도에서 현재 보고있는 관광지, 주변 관광지의 길찾기를 제공합니다.
+
+# 👨‍👨‍👦팀 소개
+|신동철|고형석|류영훈|
+|------|---|---|
+|사진|사진|사진|
+|팀장</br>프로젝트 지원 및 DB설계/실데이터 구축</br>주변 볼꺼리, 경로 볼꺼리, 실시간 상담 구현|공지사항, FAQ, 게시판</br>사용자와 관리자의 일대일 문의</br>로그인API|상세페이지</br>페이지 찜 및 리뷰, 좋아요, 지도API|
+|<a href="https://github.com/bluelegend75/everywhere_aws.git">GitHub|없음|<a href="https://github.com/RyuYeongHun">GitHub|
+
+|방준식|이민웅|정성훈|
+|------|---|---|
+|사진|사진|사진|
+|로그인/회원가입</br>관리자 회원 관리 페이지</br>아이디 찾기/비밀번호 변경|여행지 리스트 및 지도 탐색 기능 구현</br>검색 필터 및 정렬 기능|아이템 기획, 전체적인 레이아웃 & 디자인 설계</br>AI추천 페이지 기능 및 로직 구현|
+|없음|없음|없음|
+
+# 💻기술스택  
+## Tools
   VisualStudioCode,
   STS,
   oracle,
@@ -9,7 +35,7 @@
   Figma,
   git
 
-# Developer Language & FrameWork
+## Developer Language & FrameWork
   html5,
   css3,
   JavaScript,
@@ -18,11 +44,11 @@
   Spring,
   MyBatis,
 
-# Database & Server
+## Database & Server
   Oracle,
   Apatche
 
-# API
+## API
   KaKaomap API,
   KaKaomobility,
   naver,
@@ -52,14 +78,14 @@
 # 상세페이지 06
 ![image](https://github.com/user-attachments/assets/5ec30a46-2a9f-4ca1-bc98-e4a3e631319c)
 
-# 프로젝트 일정
+# ⌛프로젝트 일정
 2024.08.06부터 2024.09.20일까지 총45일간 프로젝트를 진행하였습니다.
 
-# 프로젝트 후기
+# 📝프로젝트 후기
 AJAX를 통한 비동기통신으로 JSON데이터를 보내 실시간 반영되는 것을 확인하는 것이 좋았고,
 사용자 UI/UX에 맞춘 플랫폼이다 보니 적절한 정보 전달이 잘 이루어진것 같아 좋았습니다.
 또한 UX의 경험으로만 갖춰진 리뷰를 직접 만들어보니 뜻깊고 새로운 경험이었습니다.
 다만, 개인적인 견해로 마감 기한이 조금만 더 길었더라면, 추가해 보고 싶은 기능들이 빠진것 같아 아쉬운 부분이 남습니다.
 
-# PDF
+# 📒PDF
 [여행추천플랫폼_류영훈.pdf](https://github.com/user-attachments/files/17359516/_.pdf)
