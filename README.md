@@ -56,15 +56,17 @@ https://aws.bluelegend.net
 </div>
 
 ## API
-  KaKaomap API,
-  KaKaomobility,
-  naver,
-  공공데이터
+<div>
+  <p><code><img height="40" src="https://i.namu.wiki/i/Q7m-qtpjpgBNnM3Sw6jclfrN7ynPtUHxm3x6L1Qiql7UeLU_jiPrxw6MiH6aAfKJEt2GybFqofgvg-2gF6Vf7dlH2-CJco4NQ82zz4FJjJKusIgB3FWJNzpORl6oC6ZgaAwlvBTzGt9xLDeapR2VMw.webp" style="max-width: 100%;"></code></p>
+  <p><code><img height="40" src="https://i.namu.wiki/i/qlrxgSdVOUM0OCqdMPeltgQgM2wRdxAtMgq1cuzttG0VrDT1RCrYjXDY3XrwS34KD4LRRtHdL7oiTwk6fjno7Wt5wdK_wr4SLkml2OZWe5DGHwJ4eeuF7yvepPyXRDS4jz3saU4fAajJGqG2swpVGA.svg" style="max-width: 100%;"></code></p>
+  <p><code><img height="40" src="https://i.namu.wiki/i/wVJls3TqfS9K5Psw7eadmkA-2jm0o8DoHDF9pg7UN2ER_uYmdpGeNbPFxOvdi8W2Tc76mgSHJHuaeUM2OWM4gfE62hI-1aHrouB9YKRFHe4s3hT5p3M2Bt4aYQiolZyYoGTbnwFcNLHxuz5jsMEHdg.svg" style="max-width: 100%;"></code></p>
+  <p><code><img height="40" src="https://www.gwff.kr/template/resources/images/cont/site_img_01.png" style="max-width: 100%;"></code></p>
+</div>
 
-# Process Diagram
+# ⚙Process Diagram
 ![image](https://github.com/user-attachments/assets/d5a14ef2-b4a5-446e-9c09-679b3e4282ba)
 
-# ERD
+# 🧩ERD
 ![image](https://github.com/user-attachments/assets/8bdc4ad1-4c4d-4f26-b697-15f871d6b0bf)
 
 # 상세페이지 01
