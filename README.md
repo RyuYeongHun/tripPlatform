@@ -25,41 +25,41 @@ https://aws.bluelegend.net
 ||||
 
 # 💻기술스택  
-## Tools
-<div>
-  <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat-square&logo=Visual Studio Code&logoColor=white"/>
-  <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
-  <img src="https://img.shields.io/badge/subversion-809CC9?style=flat-square&logo=subversion&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
-  <p><code><img height="40" src="https://jtuts.com/wp-content/uploads/2016/03/spring-tool-suite-project-logo.png" style="max-width: 100%;"></code></p>
-</div>
+> ## Tools
+> > <div>
+  > > <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat-square&logo=Visual Studio Code&logoColor=white"/>
+  > > <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
+  > > <img src="https://img.shields.io/badge/subversion-809CC9?style=flat-square&logo=subversion&logoColor=white"/>
+  > > <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/>
+  > > <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>
+  > > <p><code><img height="40" src="https://jtuts.com/wp-content/uploads/2016/03/spring-tool-suite-project-logo.png" style="max-width: 100%;"></code></p>
+> > </div>
 
-## Developer Language & FrameWork
-<div>
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/>
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
-  <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=white"/>
-  <img src="https://img.shields.io/badge/JSON-000000?style=flat-square&logo=json&logoColor=white"/>
-  <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
-  <p><code><img height="40" src="https://avatars.githubusercontent.com/u/1483254?s=200&v=4" style="max-width: 100%;"></code></p>
-</div>
+> ## Developer Language & FrameWork
+> >   <div>
+> >     <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
+> >     <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/JSON-000000?style=flat-square&logo=json&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+> >     <p><code><img height="40" src="https://avatars.githubusercontent.com/u/1483254?s=200&v=4" style="max-width: 100%;"></code></p>
+> >   </div>
 
-## Database & Server
-<div>
-  <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
-  <img src="https://img.shields.io/badge/apachetomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=black"/>
-</div>
+> ## Database & Server
+> >   <div>
+> >     <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
+> >     <img src="https://img.shields.io/badge/apachetomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=black"/>
+> >   </div>
 
-## API
-<div>
-  <p><code><img height="40" src="https://i.namu.wiki/i/Q7m-qtpjpgBNnM3Sw6jclfrN7ynPtUHxm3x6L1Qiql7UeLU_jiPrxw6MiH6aAfKJEt2GybFqofgvg-2gF6Vf7dlH2-CJco4NQ82zz4FJjJKusIgB3FWJNzpORl6oC6ZgaAwlvBTzGt9xLDeapR2VMw.webp" style="max-width: 100%;"></code></p>
-  <p><code><img height="40" src="https://i.namu.wiki/i/qlrxgSdVOUM0OCqdMPeltgQgM2wRdxAtMgq1cuzttG0VrDT1RCrYjXDY3XrwS34KD4LRRtHdL7oiTwk6fjno7Wt5wdK_wr4SLkml2OZWe5DGHwJ4eeuF7yvepPyXRDS4jz3saU4fAajJGqG2swpVGA.svg" style="max-width: 100%;"></code></p>
-  <p><code><img height="40" src="https://i.namu.wiki/i/wVJls3TqfS9K5Psw7eadmkA-2jm0o8DoHDF9pg7UN2ER_uYmdpGeNbPFxOvdi8W2Tc76mgSHJHuaeUM2OWM4gfE62hI-1aHrouB9YKRFHe4s3hT5p3M2Bt4aYQiolZyYoGTbnwFcNLHxuz5jsMEHdg.svg" style="max-width: 100%;"></code></p>
-  <p><code><img height="40" src="https://www.gwff.kr/template/resources/images/cont/site_img_01.png" style="max-width: 100%;"></code></p>
-</div>
+> ## API
+> >   <div>
+> >     <p><code><img height="40" src="https://i.namu.wiki/i/Q7m-qtpjpgBNnM3Sw6jclfrN7ynPtUHxm3x6L1Qiql7UeLU_jiPrxw6MiH6aAfKJEt2GybFqofgvg-2gF6Vf7dlH2-CJco4NQ82zz4FJjJKusIgB3FWJNzpORl6oC6ZgaAwlvBTzGt9xLDeapR2VMw.webp" style="max-width: 100%;"></code></p>
+> >     <p><code><img height="40" src="https://i.namu.wiki/i/qlrxgSdVOUM0OCqdMPeltgQgM2wRdxAtMgq1cuzttG0VrDT1RCrYjXDY3XrwS34KD4LRRtHdL7oiTwk6fjno7Wt5wdK_wr4SLkml2OZWe5DGHwJ4eeuF7yvepPyXRDS4jz3saU4fAajJGqG2swpVGA.svg" style="max-width: 100%;"></code></p>
+> >     <p><code><img height="40" src="https://i.namu.wiki/i/wVJls3TqfS9K5Psw7eadmkA-2jm0o8DoHDF9pg7UN2ER_uYmdpGeNbPFxOvdi8W2Tc76mgSHJHuaeUM2OWM4gfE62hI-1aHrouB9YKRFHe4s3hT5p3M2Bt4aYQiolZyYoGTbnwFcNLHxuz5jsMEHdg.svg" style="max-width: 100%;"></code></p>
+> >     <p><code><img height="40" src="https://www.gwff.kr/template/resources/images/cont/site_img_01.png" style="max-width: 100%;"></code></p>
+> >  </div>
 
 # ⚙Process Diagram
 ![image](https://github.com/user-attachments/assets/d5a14ef2-b4a5-446e-9c09-679b3e4282ba)
